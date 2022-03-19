@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Membership page
+{% endblock %}
+
+{% block body %}
+    {% for title in titles %}
+        <li>{{ title }}</li>
+    {% endfor %}
+    {{ app_name }}
+{% endblock %}
