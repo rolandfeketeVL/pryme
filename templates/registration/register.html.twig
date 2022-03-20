@@ -1,6 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseAuthentication.html.twig' %}
 
 {% block title %}Register{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/theme-checkbox-radio.css">
+    <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/switches.css">
+{% endblock %}
 
 {% block body %}
 
@@ -33,15 +38,14 @@
 {#                                    <input id="password" name="password" type="password" value="" placeholder="Password">#}
                                     {{ form_row(registrationForm.plainPassword) }}
                                 </div>
-                                <div class="field-wrapper terms_condition">
-                                    <div class="n-chk new-checkbox checkbox-outline-primary">
-                                        <label class="new-control new-checkbox checkbox-outline-primary">
-{#                                            <input type="checkbox" class="new-control-input">#}
-                                            {{ form_row(registrationForm.agreeTerms) }}
-                                            <span class="new-control-indicator"></span><span>I agree to the <a href="javascript:void(0);">  terms and conditions </a></span>
-                                        </label>
-                                    </div>
-                                </div>
+{#                                <div class="field-wrapper terms_condition">#}
+{#                                    <div class="n-chk new-checkbox checkbox-outline-primary">#}
+{#                                        <label class="new-control new-checkbox checkbox-outline-primary">#}
+{#                                            <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" class="new-control-input" value="1">#}
+{#                                            <span class="new-control-indicator"></span><span>I agree to the <a href="javascript:void(0);">  terms and conditions </a></span>#}
+{#                                        </label>#}
+{#                                    </div>#}
+{#                                </div>#}
                                 <div class="d-sm-flex justify-content-between">
                                     <div class="field-wrapper toggle-pass">
                                         <p class="d-inline-block">Show Password</p>
@@ -57,7 +61,7 @@
 
                             </div>
                         {{ form_end(registrationForm) }}
-                        <p class="terms-conditions">© 2020 All Rights Reserved. <a href="index.html">CORK</a> is a product of Designreset. <a href="javascript:void(0);">Cookie Preferences</a>, <a href="javascript:void(0);">Privacy</a>, and <a href="javascript:void(0);">Terms</a>.</p>
+                        <p class="terms-conditions">© 2022 All Rights Reserved. <a href="index.html">PRYME</a> is a product of <a href="https://ptsbyemilia.com/">PTS by Emilia</a>. </p>
 
                     </div>
                 </div>
@@ -76,4 +80,9 @@
 
 {#        <button type="submit" class="btn">Register</button>#}
 {#    {{ form_end(registrationForm) }}#}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="theme/assets/js/authentication/registerForm.js"></script>
 {% endblock %}
