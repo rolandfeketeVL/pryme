@@ -5,24 +5,33 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-{#        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">#}
-{#        <link href="../assets/styles/bootstrap.min.css" rel="stylesheet" type="text/css" />#}
-{#        <link href="../assets/styles/theme/plugins.css" rel="stylesheet" type="text/css" />#}
-{#        <link href="../assets/styles/theme/authentication/form-1.css" rel="stylesheet" type="text/css" />#}
-
-{#        <link rel="stylesheet" type="text/css" href="../assets/styles/theme/forms/theme-checkbox-radio.css">#}
-{#        <link rel="stylesheet" type="text/css" href="../assets/styles/theme/forms/switches.css">#}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+        <link href="theme/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="theme/assets/css/plugins.css" rel="stylesheet" type="text/css" />
+        <link href="theme/assets/css/authentication/form-1.css" rel="stylesheet" type="text/css" />
+        <!-- END GLOBAL MANDATORY STYLES -->
+        <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/theme-checkbox-radio.css">
+        <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/switches.css">
+{#        {% block stylesheets %}#}
+{#            {{ encore_entry_link_tags('app') }}#}
+{#        {% endblock %}#}
 
 
     </head>
     <body class="form">
         {% block body %}{% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
+{#        {% block javascripts %}#}
+{#            {{ encore_entry_script_tags('app') }}#}
+{#        {% endblock %}#}
+        <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+        <script src="theme/assets/js/libs/jquery-3.1.1.min.js"></script>
+        <script src="theme/bootstrap/js/popper.min.js"></script>
+        <script src="theme/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- END GLOBAL MANDATORY SCRIPTS -->
+        <script src="theme/assets/js/authentication/form-1.js"></script>
+
     </body>
 </html>

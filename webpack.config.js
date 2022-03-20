@@ -21,16 +21,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    // .addEntry('app', './assets/js/theme/libs/jquery-3.1.1.min.js')
-    // .addEntry('app', './assets/js/bootstrap/popper.min.js')
-    // .addEntry('app', './assets/js/bootstrap/bootstrap.min.js')
-    // .addEntry('app', './assets/js/theme/authentication/form-1.js')
-    // .addEntry('app', './assets/js/theme/authentication/form-1.js')
-    // .addEntry('app', './assets/styles/theme/forms/switches.css')
-    // .addEntry('app', './assets/styles/theme/forms/theme-checkbox-radio.css')
-    // .addEntry('app', './assets/styles/theme/authentication/form-1.css')
-    // .addEntry('app', './assets/styles/theme/plugins.css')
-    // .addEntry('app', './assets/styles/bootstrap.min.css')
+
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
