@@ -23,7 +23,7 @@ class MembershipController extends AbstractController
         $repository = $this->em->getRepository(Membership::class);
         $memberships = $repository->count([]);
 
-        dd($memberships);
+        //dd($memberships);
 
         return $this->render('index.html.twig');
     }
