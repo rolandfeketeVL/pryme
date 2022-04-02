@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/theme-checkbox-radio.css">
     <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/switches.css">
     <link rel="stylesheet" type="text/css" href="theme/assets/css/elements/alert.css">
+    <link rel="stylesheet" type="text/css" href="theme/plugins/notification/snackbar/snackbar.min.css">
 {% endblock %}
 
 {% block body %}
@@ -131,4 +132,17 @@
 
 {% block javascripts %}
     <script src="theme/assets/js/authentication/loginForm.js"></script>
+    <script src="theme/plugins/notification/snackbar/snackbar.min.js"></script>
+    <script>
+
+        {% for message in app.flashes('success') %}
+            Snackbar.show({
+                text: '{{ message }}',
+                actionTextColor: '#fff',
+                backgroundColor: '#1abc9c',
+                pos: 'top-right'
+            });
+        {% endfor %}
+
+    </script>
 {% endblock %}

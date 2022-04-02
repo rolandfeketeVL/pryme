@@ -612,7 +612,7 @@ code {
     display: block;
     opacity: .1; }
 
-/* User Profile Dropdown*/
+/* Users Profile Dropdown*/
 .navbar .navbar-item .nav-item.user-profile-dropdown {
   margin: 0 20px 0 16px; }
   .navbar .navbar-item .nav-item.user-profile-dropdown .nav-link.user {
