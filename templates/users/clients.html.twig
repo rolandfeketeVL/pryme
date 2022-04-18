@@ -9,6 +9,10 @@
     <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/datatables.css">
     <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/theme-checkbox-radio.css">
     <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/dt-global_style.css">
+    <link rel="stylesheet" type="text/css" href="theme/plugins/animate/animate.css"/>
+    <link href="theme/assets/css/scrollspyNav.css" rel="stylesheet" type="text/css" />
+    <link href="theme/assets/css/components/custom-modal.css" rel="stylesheet" type="text/css" />
+    <link href="theme/plugins/file-upload/file-upload-with-preview.min.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL STYLES -->
 {% endblock %}
 
@@ -41,401 +45,60 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Membership</th>
+                                    <th>Expiration Date</th>
+                                    <th>Credits</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
+                                {% for client in clients %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="usr-img-frame mr-2 rounded-circle">
+                                                    <img alt="avatar" class="img-fluid rounded-circle" src="theme/assets/img/90x90.jpg">
+                                                </div>
+                                                <p class="align-self-center mb-0 admin-name"> {{ client.firstName }} {{ client.lastName }} </p>
                                             </div>
-                                            <p class="align-self-center mb-0 admin-name"> Tiger </p>
-                                        </div>
-                                    </td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
+                                        </td>
+                                        <td>{{ client.email }}</td>
+                                        <td>{{ client.phone }}</td>
+                                        <td>{{ client.membership.name }}</td>
+                                        <td>{{ client.membershipExpiryDate | date('Y-m-d') }}</td>
+                                        <td>{{ client.creditsRemaining }}</td>
+                                        <td class="text-center">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                                                </a>
+
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink1" style="will-change: transform;">
+                                                    <a class="dropdown-item" href="javascript:void(0);">View</a>
+                                                    <a class="dropdown-item" data-toggle="modal" data-target="#editModal" href="javascript:void(0);">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                                </div>
                                             </div>
-                                            <p class="align-self-center mb-0 admin-name"> Garrett </p>
-                                        </div>
-                                    </td>
-                                    <td>Accountant</td>
-                                    <td>Tokyo</td>
-                                    <td>63</td>
-                                    <td>2011/07/25</td>
-                                    <td>$170,750</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Ashton </p>
-                                        </div>
-                                    </td>
-                                    <td>Junior Technical Author</td>
-                                    <td>San Francisco</td>
-                                    <td>66</td>
-                                    <td>2009/01/12</td>
-                                    <td>$86,000</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Cedric </p>
-                                        </div>
-                                    </td>
-                                    <td>Senior Javascript Developer</td>
-                                    <td>Edinburgh</td>
-                                    <td>22</td>
-                                    <td>2012/03/29</td>
-                                    <td>$433,060</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Airi </p>
-                                        </div>
-                                    </td>
-                                    <td>Accountant</td>
-                                    <td>Tokyo</td>
-                                    <td>33</td>
-                                    <td>2008/11/28</td>
-                                    <td>$162,700</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Brielle </p>
-                                        </div>
-                                    </td>
-                                    <td>Integration Specialist</td>
-                                    <td>New York</td>
-                                    <td>61</td>
-                                    <td>2012/12/02</td>
-                                    <td>$372,000</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Herrod </p>
-                                        </div>
-                                    </td>
-                                    <td>Sales Assistant</td>
-                                    <td>San Francisco</td>
-                                    <td>59</td>
-                                    <td>2012/08/06</td>
-                                    <td>$137,500</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Rhona </p>
-                                        </div>
-                                    </td>
-                                    <td>Integration Specialist</td>
-                                    <td>Tokyo</td>
-                                    <td>55</td>
-                                    <td>2010/10/14</td>
-                                    <td>$327,900</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Colleen </p>
-                                        </div>
-                                    </td>
-                                    <td>Javascript Developer</td>
-                                    <td>San Francisco</td>
-                                    <td>39</td>
-                                    <td>2009/09/15</td>
-                                    <td>$205,500</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Sonya </p>
-                                        </div>
-                                    </td>
-                                    <td>Software Engineer</td>
-                                    <td>Edinburgh</td>
-                                    <td>23</td>
-                                    <td>2008/12/13</td>
-                                    <td>$103,600</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Jena </p>
-                                        </div>
-                                    </td>
-                                    <td>Office Manager</td>
-                                    <td>London</td>
-                                    <td>30</td>
-                                    <td>2008/12/19</td>
-                                    <td>$90,560</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Quinn </p>
-                                        </div>
-                                    </td>
-                                    <td>Support Lead</td>
-                                    <td>Edinburgh</td>
-                                    <td>22</td>
-                                    <td>2013/03/03</td>
-                                    <td>$342,000</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Charde </p>
-                                        </div>
-                                    </td>
-                                    <td>Regional Director</td>
-                                    <td>San Francisco</td>
-                                    <td>36</td>
-                                    <td>2008/10/16</td>
-                                    <td>$470,600</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Haley </p>
-                                        </div>
-                                    </td>
-                                    <td>Senior Marketing Designer</td>
-                                    <td>London</td>
-                                    <td>43</td>
-                                    <td>2012/12/18</td>
-                                    <td>$313,500</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Tatyana </p>
-                                        </div>
-                                    </td>
-                                    <td>Regional Director</td>
-                                    <td>London</td>
-                                    <td>19</td>
-                                    <td>2010/03/17</td>
-                                    <td>$385,750</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Michael </p>
-                                        </div>
-                                    </td>
-                                    <td>Marketing Designer</td>
-                                    <td>London</td>
-                                    <td>66</td>
-                                    <td>2012/11/27</td>
-                                    <td>$198,500</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Paul </p>
-                                        </div>
-                                    </td>
-                                    <td>Chief Financial Officer (CFO)</td>
-                                    <td>New York</td>
-                                    <td>64</td>
-                                    <td>2010/06/09</td>
-                                    <td>$725,000</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Gloria </p>
-                                        </div>
-                                    </td>
-                                    <td>Systems Administrator</td>
-                                    <td>New York</td>
-                                    <td>59</td>
-                                    <td>2009/04/10</td>
-                                    <td>$237,500</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Bradley </p>
-                                        </div>
-                                    </td>
-                                    <td>Software Engineer</td>
-                                    <td>London</td>
-                                    <td>41</td>
-                                    <td>2012/10/13</td>
-                                    <td>$132,000</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Dai </p>
-                                        </div>
-                                    </td>
-                                    <td>Personnel Lead</td>
-                                    <td>Edinburgh</td>
-                                    <td>35</td>
-                                    <td>2012/09/26</td>
-                                    <td>$217,500</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Jenette </p>
-                                        </div>
-                                    </td>
-                                    <td>Development Lead</td>
-                                    <td>New York</td>
-                                    <td>30</td>
-                                    <td>2011/09/03</td>
-                                    <td>$345,000</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Yuri </p>
-                                        </div>
-                                    </td>
-                                    <td>Chief Marketing Officer (CMO)</td>
-                                    <td>New York</td>
-                                    <td>40</td>
-                                    <td>2009/06/25</td>
-                                    <td>$675,000</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Caesar </p>
-                                        </div>
-                                    </td>
-                                    <td>Pre-Sales Support</td>
-                                    <td>New York</td>
-                                    <td>21</td>
-                                    <td>2011/12/12</td>
-                                    <td>$106,450</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Doris </p>
-                                        </div>
-                                    </td>
-                                    <td>Sales Assistant</td>
-                                    <td>Sidney</td>
-                                    <td>23</td>
-                                    <td>2010/09/20</td>
-                                    <td>$85,600</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <div class="usr-img-frame mr-2 rounded-circle">
-                                                <img alt="avatar" class="img-fluid rounded-circle" src="assets/img/90x90.jpg">
-                                            </div>
-                                            <p class="align-self-center mb-0 admin-name"> Angelica </p>
-                                        </div>
-                                    </td>
-                                    <td>Chief Executive Officer (CEO)</td>
-                                    <td>London</td>
-                                    <td>47</td>
-                                    <td>2009/10/09</td>
-                                    <td>$1,200,000</td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
                                 </tbody>
                                 <tfoot>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Membership</th>
+                                    <th>Expiration Date</th>
+                                    <th>Credits</th>
+                                    <th>Action</th>
                                 </tr>
                                 </tfoot>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -454,13 +117,142 @@
     </div>
     <!-- END MAIN CONTAINER -->
 
+
+    <!-- EDIT CLIENT MODAL -->
+    <div class="modal fade bd-example-modal-xl show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header" id="editModalLabel">
+                    <h4 class="modal-title">Edit Client</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div id="flFormsGrid" class="col-lg-12 layout-spacing">
+                            <div class="statbox widget box box-shadow">
+
+                                <div class="widget-content widget-content-area">
+                                    <form>
+                                        <div class="custom-file-container" data-upload-id="myFirstImage">
+                                            <label>Upload Picture <a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
+                                            <label class="custom-file-container__custom-file" >
+                                                <input type="file" class="custom-file-container__custom-file__custom-file-input" accept="image/*">
+                                                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                                                <span class="custom-file-container__custom-file__custom-file-control"></span>
+                                            </label>
+                                            <div class="custom-file-container__image-preview"></div>
+                                        </div>
+
+
+                                        <div class="form-row mb-4">
+                                            <div class="form-group col-md-6">
+                                                <label for="inputEmail4">First Name</label>
+                                                <input type="text" class="form-control" id="firstname" placeholder="First name">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="inputPassword4">Last Name</label>
+                                                <input type="password" class="form-control" id="lastname" placeholder="Last name">
+                                            </div>
+                                        </div>
+                                        <div class="form-row mb-4">
+                                            <div class="form-group col-md-6">
+                                                <label for="inputEmail4">Email</label>
+                                                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="inputPassword4">Password</label>
+                                                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="inputAddress">Address</label>
+                                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="inputAddress2">Address 2</label>
+                                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                                        </div>
+                                        <div class="form-row mb-4">
+                                            <div class="form-group col-md-6">
+                                                <label for="inputCity">City</label>
+                                                <input type="text" class="form-control" id="inputCity">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputState">State</label>
+                                                <select id="inputState" class="form-control">
+                                                    <option selected>Choose...</option>
+                                                    <option>...</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="inputZip">Zip</label>
+                                                <input type="text" class="form-control" id="inputZip">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check pl-0">
+                                                <div class="custom-control custom-checkbox checkbox-info">
+                                                    <input type="checkbox" class="custom-control-input" id="gridCheck">
+                                                    <label class="custom-control-label" for="gridCheck">Check me out</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-3">Sign in</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{#
+<form class="mt-0">#}
+{#                        <div class="form-group">#}
+{#                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>#}
+{#                            <input type="text" class="form-control mb-2" id="exampleInputUsername1" placeholder="Username">#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-at-sign"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>#}
+{#                            <input type="email" class="form-control mb-2" id="exampleInputEmail2" placeholder="Email">#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>#}
+{#                            <input type="password" class="form-control mb-4" id="exampleInputPassword2" placeholder="Password">#}
+{#                        </div>#}
+{#                        <button type="submit" class="btn btn-primary mt-2 mb-2 btn-block">Register</button>#}
+{#                    </form>#}
+
+                    <div class="division">
+                        <span>OR</span>
+                    </div>
+
+                    <div class="social">
+                        <a href="javascript:void(0);" class="btn social-fb"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg> <span class="brand-name">Facebook</span></a>
+                        <a href="javascript:void(0);" class="btn social-github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> <span class="brand-name">Github</span></a>
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <div class="forgot login-footer">
+                        <span>Already have <a href="javascript:void(0);">Login</a>?</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 {% endblock %}
 
 
 {% block javascripts %}
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
     <script src="theme/plugins/table/datatable/datatables.js"></script>
+    <script src="theme/assets/js/scrollspyNav.js"></script>
+    <script src="theme/plugins/file-upload/file-upload-with-preview.min.js"></script>
     <script>
+        var firstUpload = new FileUploadWithPreview('myFirstImage');
+
         $('#multi-column-ordering').DataTable({
             "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
                 "<'table-responsive'tr>" +
@@ -473,8 +265,8 @@
                 "sLengthMenu": "Results :  _MENU_",
             },
             "stripeClasses": [],
-            "lengthMenu": [7, 10, 20, 50],
-            "pageLength": 7,
+            "lengthMenu": [10, 20, 50],
+            "pageLength": 10,
             columnDefs: [ {
                 targets: [ 0 ],
                 orderData: [ 0, 1 ]
