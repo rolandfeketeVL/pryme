@@ -24,9 +24,6 @@ class Membership
     #[ORM\Column(type: 'smallint')]
     private $price;
 
-    #[ORM\Column(type: 'datetime')]
-    private $valability;
-
     #[ORM\Column(type: 'smallint')]
     private $persons_no;
 
@@ -38,6 +35,9 @@ class Membership
 
     #[ORM\OneToMany(mappedBy: 'membership', targetEntity: Users::class)]
     private $users;
+
+    #[ORM\Column(type: 'smallint')]
+    private $valability;
 
 
     public function __construct()
@@ -84,18 +84,6 @@ class Membership
     public function setPrice(int $price): self
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getValability(): ?\DateTimeInterface
-    {
-        return $this->valability;
-    }
-
-    public function setValability(\DateTimeInterface $valability): self
-    {
-        $this->valability = $valability;
 
         return $this;
     }
@@ -174,6 +162,18 @@ class Membership
                 $user->setMembership(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getValability(): ?int
+    {
+        return $this->valability;
+    }
+
+    public function setValability(int $valability): self
+    {
+        $this->valability = $valability;
 
         return $this;
     }

@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class Users implements UserInterface, PasswordAuthenticatedUserInterface
+class Users implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -349,5 +349,30 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->smsConsent = $smsConsent;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id'                     => $this->id,
+            'email'                  => $this->email,
+            'roles'                  => $this->roles,
+            'password'               => $this->password,
+            'first_name'             => $this->firstName,
+            'last_name'              => $this->lastName,
+            'phone'                  => $this->phone,
+            'gender'                 => $this->gender,
+            'birthdate'              => $this->birthdate,
+            'street'                 => $this->street,
+            'state'                  => $this->state,
+            'city'                   => $this->city,
+            'country'                => $this->country,
+            'zip'                    => $this->zip,
+            'total_bookings'         => $this->totalBookings,
+            'membership'             => $this->membership,
+            'last_booking'           => $this->lastBooking,
+            'membership_expiry_date' => $this->membershipExpiryDate,
+            'credits_remaining'      => $this->creditsRemaining
+        ];
     }
 }
