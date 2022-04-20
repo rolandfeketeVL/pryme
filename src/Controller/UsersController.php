@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Membership;
 use App\Entity\Users;
-use App\Form\EditClientFormType;
 use Doctrine\ORM\EntityManagerInterface;
-//use http\Client\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +28,6 @@ class UsersController extends AbstractController
 
         foreach ($clients as $client)
         {
-
             $client->setMembership($MembershipRepository->findOneById($client->getMembership()->getId()));
         }
 
@@ -41,18 +38,29 @@ class UsersController extends AbstractController
         return $this->render('users/clients.html.twig', $data);
     }
 
-    #[Route('/updateClient/{id}', methods: ['POST'])]
-    public function updateClient($id, Request $request): Response
+    #[Route('/updateClient/{id}', name: 'updateClient', methods: ['POST', 'GET', 'HEAD'])]
+    public function updateClient(Request $request, $id): Response
     {
         $UserRepository = $this->em->getRepository(Users::class);
         $client = $UserRepository->find($id);
-        $form = $this->createForm(EditClientFormType::class, $client);
 
-        $form->handleRequest($request);
-        if($form->isSubmitted()){
-            dd('OK');
+        if($request->getContent())
+        {
+            $client->setFirstName($request->request->get('firstname'));
+            $client->setLastName($request->request->get('lastname'));
+            $client->setEmail($request->request->get('email'));
+            $client->setPhone($request->request->get('phone'));
+            $client->setStreet($request->request->get('street'));
+            $client->setCity($request->request->get('city'));
+            $client->setZip($request->request->get('zip'));
+            $client->setState($request->request->get('state'));
+            $client->setCountry($request->request->get('country'));
+
+            $this->em->flush();
+            return new JsonResponse('OK', JsonResponse::HTTP_OK);
         }
 
         return new JsonResponse($client, JsonResponse::HTTP_OK);
     }
+
 }

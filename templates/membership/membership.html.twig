@@ -1,7 +1,7 @@
 {% extends "baseAdmin.html.twig" %}
 
 {% block title %}
-    Clients - PRYME
+    Memberships - PRYME
 {% endblock %}
 
 {% block stylesheets %}
@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/datatables.css">
     <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/theme-checkbox-radio.css">
     <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/dt-global_style.css">
+    <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/custom_dt_custom.css">
     <link rel="stylesheet" type="text/css" href="theme/plugins/animate/animate.css"/>
     <link href="theme/assets/css/scrollspyNav.css" rel="stylesheet" type="text/css" />
     <link href="theme/assets/css/components/custom-modal.css" rel="stylesheet" type="text/css" />
@@ -41,46 +42,36 @@
                 <div class="row layout-top-spacing">
                     <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                         <div class="widget-content widget-content-area br-6">
-                            <table id="multi-column-ordering" class="table table-hover" style="width:100%">
+                            <button class="btn btn-primary m-2 btn-sm" data-toggle="modal" data-target="#editModal" onclick="ClearModal();">Add Membership</button>
+                        </div>
+                        <div class="widget-content widget-content-area br-6">
+
+                            <table id="multi-column-ordering" class="table table-hover style-3" style="width:100%">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Membership</th>
-                                    <th>Expiration Date</th>
                                     <th>Credits</th>
+                                    <th>Availability (months)</th>
+                                    <th>Price</th>
+                                    <th>Persons no.</th>
+                                    <th>Duration (min)</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for client in clients %}
+                                {% for membership in memberships %}
                                     <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <div class="usr-img-frame mr-2 rounded-circle">
-                                                    <img alt="avatar" class="img-fluid rounded-circle" src="theme/assets/img/90x90.jpg">
-                                                </div>
-                                                <p class="align-self-center mb-0 admin-name"> {{ client.firstName }} {{ client.lastName }} </p>
-                                            </div>
-                                        </td>
-                                        <td>{{ client.email }}</td>
-                                        <td>{{ client.phone }}</td>
-                                        <td>{{ client.membership.name }}</td>
-                                        <td>{{ client.membershipExpiryDate | date('Y-m-d') }}</td>
-                                        <td>{{ client.creditsRemaining }}</td>
+                                        <td>{{ membership.name }}</td>
+                                        <td>{{ membership.credits }}</td>
+                                        <td>{{ membership.valability }}</td>
+                                        <td>{{ membership.price }} RON</td>
+                                        <td>{{ membership.personsNo }}</td>
+                                        <td>{{ membership.minutes }} min</td>
                                         <td class="text-center">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                                </a>
-
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink1" style="will-change: transform;">
-                                                    <a class="dropdown-item" href="javascript:void(0);">View</a>
-                                                    <a class="dropdown-item" data-toggle="modal" data-target="#editModal" onclick="populateModal({{ client.id }})" href="javascript:void(0);">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                                </div>
-                                            </div>
+                                            <ul class="table-controls">
+                                                <li><a href="javascript:void(0);" class="bs-tooltip" data-toggle="modal" data-target="#editModal" onclick="populateModal({{ membership.id }});" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 p-1 br-6 mb-1"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a></li>
+                                                <li><a href="javascript:void(0);" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash p-1 br-6 mb-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a></li>
+                                            </ul>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -89,11 +80,11 @@
                                 <tfoot>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Membership</th>
-                                    <th>Expiration Date</th>
                                     <th>Credits</th>
+                                    <th>Availability (months)</th>
+                                    <th>Price</th>
+                                    <th>Persons no.</th>
+                                    <th>Duration (min)</th>
                                     <th>Action</th>
                                 </tr>
                                 </tfoot>
@@ -121,7 +112,7 @@
             <div class="modal-content">
 
                 <div class="modal-header" id="editModalLabel">
-                    <h4 class="modal-title">Edit Client</h4>
+                    <h4 class="modal-title">Edit Membership</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="modal-body">
@@ -130,54 +121,40 @@
                             <div class="statbox widget box box-shadow">
 
                                 <div class="widget-content widget-content-area">
-                                    <form method="get" id="updateClient">
+                                    <form method="get" id="updateMembership">
                                         <div class="form-row mb-4">
                                             <div class="form-group col-md-6">
-                                                <label for="firstname">First Name</label>
-                                                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="First name">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="lastname">Last Name</label>
-                                                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Last name">
-                                            </div>
-                                        </div>
-                                        <div class="form-row mb-4">
-                                            <div class="form-group col-md-6">
-                                                <label for="email">Email</label>
-                                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="phone">Phone</label>
-                                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone">
-                                            </div>
-                                        </div>
-                                        <div class="form-row mb-4">
-                                            <div class="form-group col-md-6">
-                                                <label for="inputAddress">Street & number</label>
-                                                <input type="text" class="form-control" name="street" id="street" placeholder="Street">
+                                                <label for="name">Name</label>
+                                                <input type="text" class="form-control" name="name" id="name" placeholder="Name">
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label for="inputAddress">City</label>
-                                                <input type="text" class="form-control" name="city" id="city" placeholder="City">
+                                                <label for="credits">Credits</label>
+                                                <input type="number" class="form-control" name="credits" id="credits" placeholder="Credits">
                                             </div>
                                             <div class="form-group col-md-2">
-                                                <label for="zip">Zip</label>
-                                                <input type="text" class="form-control" name="zip" id="zip">
+                                                <label for="valability">Availability</label>
+                                                <input type="number" class="form-control" name="valability" id="valability" placeholder="Months">
                                             </div>
                                         </div>
-                                        <div class="form-row mb-4">
-                                            <div class="form-group col-md-6">
-                                                <label for="inputCity">State</label>
-                                                <input type="text" class="form-control" name="state" id="state">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="inputCity">Country</label>
-                                                <input type="text" class="form-control" name="country" id="country">
-                                            </div>
 
+                                        <div class="form-row mb-4">
+                                            <div class="form-group col-md-4">
+                                                <label for="price">Price</label>
+                                                <input type="number" class="form-control" name="price" id="price" placeholder="Price">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="personsNo">Persons no.</label>
+                                                <input type="number" class="form-control" name="personsNo" id="personsNo" placeholder="Persons no.">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="minutes">Duration</label>
+                                                <input type="number" class="form-control" name="minutes" id="minutes" placeholder="Min">
+                                            </div>
                                         </div>
-                                        <input type="hidden" id="userID">
-                                        <button type="button" id="editUserSubmit" class="btn btn-primary mt-3">Submit</button>
+
+
+                                        <input type="hidden" id="membershipID">
+                                        <button type="button" id="editMembershipSubmit" class="btn btn-primary mt-3">Submit</button>
                                     </form>
                                 </div>
                             </div>
@@ -226,11 +203,19 @@
             } ]
         });
 
-        $('#editUserSubmit').click(function (){
-            let formData = $('#updateClient').serializeArray();
+        $('#editMembershipSubmit').click(function (){
+            let url;
+
+            if($("#membershipID").val() == 0) {
+                url = '/createMembership/';
+            } else {
+                url = '/updateMembership/' + $("#membershipID").val();
+            }
+
+            let formData = $('#updateMembership').serializeArray();
 
             $.ajax({
-                url: '/updateClient/' + $("#userID").val(),
+                url: url,
                 type: "POST",
                 data: objectifyForm(formData),
                 success: function (data) {
@@ -240,31 +225,39 @@
         })
 
         function objectifyForm(formArray) {
-            var returnArray = {};
-            for (var i = 0; i < formArray.length; i++){
+            let returnArray = {};
+            for (let i = 0; i < formArray.length; i++){
                 returnArray[formArray[i]['name']] = formArray[i]['value'];
             }
             return returnArray;
         }
 
         function populateModal(id) {
-            $("#userID").val(id);
+            $("#membershipID").val(id);
             $.ajax({
-                url: '/updateClient/' + id,
+                url: '/updateMembership/' + id,
                 type: 'POST',
                 dataType: 'json',
-                success: function(user) {
-                    $("#firstname").val(user.first_name);
-                    $("#lastname").val(user.last_name);
-                    $("#email").val(user.email);
-                    $("#phone").val(user.phone);
-                    $("#street").val(user.street);
-                    $("#city").val(user.city);
-                    $("#zip").val(user.zip);
-                    $("#state").val(user.state);
-                    $("#country").val(user.country);
+                success: function(membership) {
+                    console.log((membership));
+                    $("#name").val(membership.name);
+                    $("#credits").val(membership.credits);
+                    $("#valability").val(membership.valability);
+                    $("#price").val(membership.price);
+                    $("#personsNo").val(membership.persons_no);
+                    $("#minutes").val(membership.minutes);
                 }
             });
+        }
+
+        function ClearModal(){
+            $("#name").val("");
+            $("#credits").val("");
+            $("#valability").val("");
+            $("#price").val("");
+            $("#personsNo").val("");
+            $("#minutes").val("");
+            $("#membershipID").val(0);
         }
     </script>
     <!-- END PAGE LEVEL SCRIPTS -->
