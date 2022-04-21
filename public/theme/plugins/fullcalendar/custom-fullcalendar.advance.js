@@ -372,7 +372,7 @@ $(document).ready(function() {
         var concatenateStartDateTime = startDate+'T'+startTime+':00';
         var concatenateEndDateTime = endDate+'T'+endTime+':00';
 
-        var inputDescription = document.getElementById("taskdescription").value;
+        //var inputDescription = document.getElementById("taskdescription").value;
         var myCalendar = $('#calendar');
         myCalendar.fullCalendar();
         var myEvent = {
@@ -383,7 +383,7 @@ $(document).ready(function() {
           start: concatenateStartDateTime,
           end: concatenateEndDateTime,
           className: radioValue,
-          description: inputDescription
+          description: inputValue
         };
         myCalendar.fullCalendar( 'renderEvent', myEvent, true );
         modal.style.display = "none";
@@ -422,4 +422,6 @@ $(document).ready(function() {
             setCurrentDateHighlightStyle();
         })
     }
+
+
 });

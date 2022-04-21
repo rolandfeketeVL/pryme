@@ -39,11 +39,15 @@ class Membership
     #[ORM\Column(type: 'smallint')]
     private $valability;
 
+    #[ORM\OneToMany(mappedBy: 'membership', targetEntity: Event::class)]
+    private $events;
+
 
     public function __construct()
     {
         $this->benefits = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
 
@@ -174,6 +178,36 @@ class Membership
     public function setValability(int $valability): self
     {
         $this->valability = $valability;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setMembership($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getMembership() === $this) {
+                $event->setMembership(null);
+            }
+        }
 
         return $this;
     }
