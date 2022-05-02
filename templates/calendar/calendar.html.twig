@@ -55,10 +55,10 @@
                             <div class="row">
                                 <div class="col-md-8 col-12">
                                     <div class="labels">
-                                        <p class="label label-primary">Work</p>
-                                        <p class="label label-warning">Travel</p>
-                                        <p class="label label-success">Personal</p>
-                                        <p class="label label-danger">Important</p>
+                                        <p class="label label-primary">{{ trainers[0].name }}</p>
+                                        <p class="label label-warning">{{ trainers[1].name }}</p>
+                                        <p class="label label-success">{{ trainers[2].name }}</p>
+                                        <p class="label label-danger">{{ trainers[3].name }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -103,6 +103,7 @@
                                                             <option value="{{ membership.name }}">{{ membership.name }}</option>
                                                         {% endfor %}
                                                     </select>
+                                                    <input type="hidden" name="eventId" id="eventId">
                                                 </div>
                                             </div>
 
@@ -172,7 +173,8 @@
                         <div class="modal-footer">
                             <button id="discard" class="btn" data-dismiss="modal">Discard</button>
                             <button id="add-e" class="btn" onclick="sendEvent()">Add Event</button>
-                            <button id="edit-event" class="btn">Save</button>
+                            <button id="edit-event" onclick="updateEvent()" class="btn">Save</button>
+                            <button id="delete-event" onclick="deleteEvent()" class="btn">Delete</button>
                         </div>
 
                     </div>
@@ -199,6 +201,58 @@
 
     {% block javascripts %}
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        <script>
+            // newDate = new Date()
+            // monthArray = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' ]
+            //
+            // function getDynamicMonth( monthOrder ) {
+            //     var getNumericMonth = parseInt(monthArray[newDate.getMonth()]);
+            //     var getNumericMonthInc = parseInt(monthArray[newDate.getMonth()]) + 1;
+            //     var getNumericMonthDec = parseInt(monthArray[newDate.getMonth()]) - 1;
+            //
+            //     if (monthOrder === 'default') {
+            //
+            //         if (getNumericMonth < 10 ) {
+            //             return '0' + getNumericMonth;
+            //         } else if (getNumericMonth >= 10) {
+            //             return getNumericMonth;
+            //         }
+            //
+            //     } else if (monthOrder === 'inc') {
+            //
+            //         if (getNumericMonthInc < 10 ) {
+            //             return '0' + getNumericMonthInc;
+            //         } else if (getNumericMonthInc >= 10) {
+            //             return getNumericMonthInc;
+            //         }
+            //
+            //     } else if (monthOrder === 'dec') {
+            //
+            //         if (getNumericMonthDec < 10 ) {
+            //             return '0' + getNumericMonthDec;
+            //         } else if (getNumericMonthDec >= 10) {
+            //             return getNumericMonthDec;
+            //         }
+            //     }
+            // }
+
+            var eventsList = [
+                {% for event in events %}
+                {
+                    id: '{{ event.id }}',
+                    title: '{{ event.name }}',
+                    start: '{{ event.startdate | date('Y-m-d H:i') }}',
+                    end: '{{ event.enddate | date('Y-m-d H:i') }}',
+                    className:
+                            {% if event.trainer.name == 'Robert' %} "bg-warning", {% endif %}
+                            {% if event.trainer.name == 'Emilia' %} "bg-primary", {% endif %}
+                            {% if event.trainer.name == 'Flavia' %} "bg-success", {% endif %}
+                            {% if event.trainer.name == 'Vlad' %} "bg-danger", {% endif %}
+                    description: '{{ event.trainer.name }}'
+                },
+                {% endfor %}
+            ];
+        </script>
         <script src="{{ asset('theme/plugins/fullcalendar/moment.min.js') }}"></script>
         <script src="{{ asset('theme/plugins/flatpickr/flatpickr.js') }}"></script>
         <script src="{{ asset('theme/plugins/fullcalendar/fullcalendar.min.js') }}"></script>
@@ -209,7 +263,6 @@
 
         <script>
             function sendEvent(){
-                //alert("aaa");
                 let formData = $('#eventModal').serializeArray();
 
                 $.ajax({
@@ -218,6 +271,29 @@
                     data: objectifyForm(formData),
                     success: function (data) {
                         //location.reload();
+                    }
+                })
+            }
+
+            function updateEvent(){
+                let formData = $('#eventModal').serializeArray();
+
+                $.ajax({
+                    url: '/updateEvent/' + $("#eventId").val(),
+                    type: "POST",
+                    data: objectifyForm(formData),
+                    success: function (data) {
+                        location.reload();
+                    }
+                })
+            }
+
+            function deleteEvent(){
+                $.ajax({
+                    url: '/deleteEvent/' + $("#eventId").val(),
+                    type: "GET",
+                    success: function (data) {
+                        location.reload();
                     }
                 })
             }

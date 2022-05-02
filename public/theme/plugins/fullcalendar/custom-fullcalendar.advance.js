@@ -10,6 +10,8 @@ $(document).ready(function() {
     var addEvent = document.getElementById("add-e");
     // Get the Edit Event button
     var editEvent = document.getElementById("edit-event");
+    // Get the Edit Event button
+    var deleteEvent = document.getElementById("delete-event");
     // Get the Discard Modal button
     var discardModal = document.querySelectorAll("[data-dismiss='modal']")[0];
     
@@ -53,7 +55,7 @@ $(document).ready(function() {
             textarea[j].value = '';
           i
         }
-        clearRadioGroup("marker");
+        clearRadioGroup("name");
         // Get Modal Backdrop
         var getModalBackdrop = document.getElementsByClassName('modal-backdrop')[0];
         document.body.removeChild(getModalBackdrop)
@@ -64,6 +66,7 @@ $(document).ready(function() {
         modal.style.display = "block";
         addEvent.style.display = 'block';
         editEvent.style.display = 'none';
+        deleteEvent.style.display = 'none';
         addEventTitle.style.display = 'block';
         editEventTitle.style.display = 'none';
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
@@ -91,39 +94,7 @@ $(document).ready(function() {
         }
     }
 
-    newDate = new Date()
-    monthArray = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' ]
 
-    function getDynamicMonth( monthOrder ) {
-        var getNumericMonth = parseInt(monthArray[newDate.getMonth()]);
-        var getNumericMonthInc = parseInt(monthArray[newDate.getMonth()]) + 1;
-        var getNumericMonthDec = parseInt(monthArray[newDate.getMonth()]) - 1;
-
-        if (monthOrder === 'default') {
-
-            if (getNumericMonth < 10 ) {
-                return '0' + getNumericMonth;
-            } else if (getNumericMonth >= 10) {
-                return getNumericMonth;
-            }
-
-        } else if (monthOrder === 'inc') {
-
-            if (getNumericMonthInc < 10 ) {
-                return '0' + getNumericMonthInc;
-            } else if (getNumericMonthInc >= 10) {
-                return getNumericMonthInc;
-            }
-
-        } else if (monthOrder === 'dec') {
-
-            if (getNumericMonthDec < 10 ) {
-                return '0' + getNumericMonthDec;
-            } else if (getNumericMonthDec >= 10) {
-                return getNumericMonthDec;
-            }
-        }
-    }
 
     /* initialize the calendar
     -----------------------------------------------------------------*/
@@ -134,106 +105,7 @@ $(document).ready(function() {
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        events: [
-            {
-                id: 'event-1',
-                title: 'All Day Event',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-01T14:30:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-02T14:30:00',
-                className: "bg-danger",
-                description: 'Aenean fermentum quam vel sapien rutrum cursus. Vestibulum imperdiet finibus odio, nec tincidunt felis facilisis eu. '
-            },
-            {
-                id: 'event-2',
-                title: 'Long Event',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-07T19:30:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-09T14:30:00',
-                className: "bg-primary",
-                description: 'Etiam a odio eget enim aliquet laoreet. Vivamus auctor nunc ultrices varius lobortis.'
-            },
-            {
-                id: 'event-3',
-                title: 'Conference',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-17T14:30:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-18T14:30:00',
-                className: "bg-warning",
-                description: 'Proin et consectetur nibh. Mauris et mollis purus. Ut nec tincidunt lacus. Nam at rutrum justo, vitae egestas dolor. '
-            },
-            {
-                id: 'event-4',
-                title: 'Meeting',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-12T10:30:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-13T10:30:00',
-                className: "bg-danger",
-                description: 'Mauris ut mauris aliquam, fringilla sapien et, dignissim nisl. Pellentesque ornare velit non mollis fringilla.'
-            },
-            {
-                id: 'event-5',
-                title: 'Lunch',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-12T15:00:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-13T15:00:00',
-                className: "bg-warning",
-                description: 'Integer fermentum bibendum elit in egestas. Interdum et malesuada fames ac ante ipsum primis in faucibus.'
-            },
-            {
-                id: 'event-6',
-                title: 'Meeting',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-12T21:30:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-13T21:30:00',
-                className: "bg-success",
-                description: 'Curabitur facilisis vel elit sed dapibus. Nunc sagittis ex nec ante facilisis, sed sodales purus rhoncus. Donec est sapien, porttitor et feugiat sed, eleifend quis sapien. Sed sit amet maximus dolor.'
-            },
-            {
-                id: 'event-7',
-                title: 'Happy Hour',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-12T05:30:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-13T05:30:00',
-                className: "bg-warning",
-                description: 'Morbi odio lectus, porttitor molestie scelerisque blandit, hendrerit sed ex. Aenean malesuada iaculis erat, vitae blandit nisl accumsan ut.'
-            },
-            {
-                id: 'event-8',
-                title: 'Dinner',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-12T20:00:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-13T20:00:00',
-                className: "bg-danger",
-                description: 'Sed purus urna, aliquam et pharetra ut, efficitur id mi. Pellentesque ut convallis velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-            },
-            {
-                id: 'event-9',
-                title: 'Click for Designreset (Cork Admin)',
-                url: 'http://designreset.com/cork-admin',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-27T20:00:00',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-28T20:00:00',
-                className: "bg-success",
-                description: 'Sed purus urna, aliquam et pharetra ut, efficitur id mi. Pellentesque ut convallis velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-            },
-            {
-                id: 'event-10',
-                title: 'new event',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-24T08:12:14',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('default') +'-27T22:20:20',
-                className: "bg-danger",
-                description: 'Sed purus urna, aliquam et pharetra ut, efficitur id mi. Pellentesque ut convallis velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-            },
-            {
-                id: 'event-12',
-                title: 'Other new',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('dec') +'-13T08:12:14',
-                end: newDate.getFullYear() + '-' + getDynamicMonth('dec') +'-16T22:20:20',
-                className: "bg-primary",
-                description: 'Pellentesque ut convallis velit. Sed purus urna, aliquam et pharetra ut, efficitur id mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-            },
-            {
-                id: 'event-13',
-                title: 'Upcoming Event',
-                start: newDate.getFullYear() + '-'+ getDynamicMonth('inc') +'-15T08:12:14',
-                end: newDate.getFullYear() + '-'+ getDynamicMonth('inc') +'-18T22:20:20',
-                className: "bg-primary",
-                description: 'Pellentesque ut convallis velit. Sed purus urna, aliquam et pharetra ut, efficitur id mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-            }
-
-        ],
+        events: eventsList,
         editable: true,
         eventLimit: true,
         eventMouseover: function(event, jsEvent, view) {
@@ -255,6 +127,7 @@ $(document).ready(function() {
 
             addEvent.style.display = 'none';
             editEvent.style.display = 'block';
+            deleteEvent.style.display = 'block';
 
             addEventTitle.style.display = 'none';
             editEventTitle.style.display = 'block';
@@ -264,11 +137,15 @@ $(document).ready(function() {
 
             // Calendar Event Featch
             var eventTitle = info.title;
+            var eventID = info.id;
             var eventDescription = info.description;
 
             // Task Modal Input
             var taskTitle = $('#write-e');
             var taskTitleValue = taskTitle.val(eventTitle);
+
+            var taskID = $("#eventId");
+            var eventIdValue = taskID.val(eventID)
 
             var taskDescription = $('#taskdescription');
             var taskDescriptionValue = taskDescription.val(eventDescription);
@@ -303,12 +180,14 @@ $(document).ready(function() {
             $('#edit-event').off('click').on('click', function(event) {
                 event.preventDefault();
                 /* Act on the event */
-                var radioValue = $("input[name='marker']:checked").val();
+                var radioValue = $("input[name='name']:checked").val();
+
 
                 var taskStartTimeValue = document.getElementById("start-date").value;
                 var taskEndTimeValue = document.getElementById("end-date").value;
 
                 info.title = taskTitle.val();
+                info.id = taskID.val();
                 info.description = taskDescription.val();
                 info.start = taskStartTimeValue;
                 info.end = taskEndTimeValue;
@@ -353,9 +232,11 @@ $(document).ready(function() {
         return result;
     }
     $("#add-e").off('click').on('click', function(event) {
-        var radioValue = $("input[name='marker']:checked").val();
+        var radioValue = $("input[name='name']:checked").val();
         var randomAlphaNumeric = randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
         var inputValue = $("#write-e").val();
+        var inputID = $("#eventId").val();
+
         var inputStarttDate = document.getElementById("start-date").value;
         var inputEndDate = document.getElementById("end-date").value;
 

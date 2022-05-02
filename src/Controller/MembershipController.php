@@ -80,4 +80,14 @@ class MembershipController extends AbstractController
 
         return new JsonResponse('NOT OK', JsonResponse::HTTP_OK);
     }
+
+    #[Route('/deleteMembership/{id}', name: 'deleteMembership', methods: ['GET', 'DELETE'])]
+    public function deleteMembership(Request $request, $id): Response
+    {
+        $membership = $this->MembershipRepository->find($id);
+        $this->em->remove($membership);
+        $this->em->flush();
+
+        return new JsonResponse('OK', JsonResponse::HTTP_OK);
+    }
 }
