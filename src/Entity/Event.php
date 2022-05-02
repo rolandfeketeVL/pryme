@@ -28,6 +28,9 @@ class Event
     #[ORM\ManyToOne(targetEntity: Trainer::class, inversedBy: 'events')]
     private $trainer;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private $link;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class Event
     public function setTrainer(?Trainer $trainer): self
     {
         $this->trainer = $trainer;
+
+        return $this;
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): self
+    {
+        $this->link = $link;
 
         return $this;
     }

@@ -135,10 +135,11 @@ $(document).ready(function() {
             document.getElementsByTagName('body')[0].style.overflow = 'hidden';
             createBackdropElement();
 
-            // Calendar Event Featch
+            // Calendar Event Fetch
             var eventTitle = info.title;
             var eventID = info.id;
             var eventDescription = info.description;
+            var linkContent = info.link;
 
             // Task Modal Input
             var taskTitle = $('#write-e');
@@ -146,6 +147,9 @@ $(document).ready(function() {
 
             var taskID = $("#eventId");
             var eventIdValue = taskID.val(eventID)
+
+            var linkObj = $("#link");
+            var linkValue = linkObj.val(linkContent);
 
             var taskDescription = $('#taskdescription');
             var taskDescriptionValue = taskDescription.val(eventDescription);
@@ -187,6 +191,7 @@ $(document).ready(function() {
                 var taskEndTimeValue = document.getElementById("end-date").value;
 
                 info.title = taskTitle.val();
+                info.link = linkObj.val();
                 info.id = taskID.val();
                 info.description = taskDescription.val();
                 info.start = taskStartTimeValue;
@@ -235,6 +240,7 @@ $(document).ready(function() {
         var radioValue = $("input[name='name']:checked").val();
         var randomAlphaNumeric = randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
         var inputValue = $("#write-e").val();
+        var linkValue = $("#link").val();
         var inputID = $("#eventId").val();
 
         var inputStarttDate = document.getElementById("start-date").value;
@@ -257,14 +263,15 @@ $(document).ready(function() {
         var myCalendar = $('#calendar');
         myCalendar.fullCalendar();
         var myEvent = {
-          timeZone: 'UTC',
-          allDay : false,
-          id: randomAlphaNumeric,
-          title:inputValue,
-          start: concatenateStartDateTime,
-          end: concatenateEndDateTime,
-          className: radioValue,
-          description: inputValue
+            timeZone: 'UTC',
+            allDay : false,
+            id: randomAlphaNumeric,
+            title:inputValue,
+            start: concatenateStartDateTime,
+            end: concatenateEndDateTime,
+            className: radioValue,
+            description: inputValue,
+            link: linkValue
         };
         myCalendar.fullCalendar( 'renderEvent', myEvent, true );
         modal.style.display = "none";

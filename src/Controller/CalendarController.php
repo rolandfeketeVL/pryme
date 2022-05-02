@@ -62,6 +62,7 @@ class CalendarController extends AbstractController
             $enddate = DateTime::createFromFormat('Y-m-d H:i', $request->request->get('end-date'));
 
             $event->setName($request->request->get('name'));
+            $event->setLink($request->request->get('link'));
             $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
             $event->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
             $event->setStartdate($startdate);
@@ -86,6 +87,7 @@ class CalendarController extends AbstractController
             $enddate = DateTime::createFromFormat('Y-m-d H:i', $request->request->get('end-date'));
 
             $event->setName($request->request->get('name'));
+            $event->setLink($request->request->get('link'));
             $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
             $event->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
             $event->setStartdate($startdate);

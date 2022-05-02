@@ -93,7 +93,6 @@
                                     <form class="" id="eventModal">
 
                                         <div class="row">
-
                                             <div class="col-md-12">
                                                 <label for="start-date" class="">Event Title:</label>
                                                 <div class="d-flex event-title">
@@ -106,7 +105,9 @@
                                                     <input type="hidden" name="eventId" id="eventId">
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <div class="row">
                                             <div class="col-md-6 col-sm-6 col-12">
                                                 <div class="form-group start-date">
                                                     <label for="start-date" class="">From:</label>
@@ -121,6 +122,15 @@
                                                     <div class="d-flex">
                                                         <input id="end-date" name="end-date" placeholder="End Date" type="text" class="form-control">
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="start-date" class="">Event Title:</label>
+                                                <div class="d-flex event-title">
+                                                    <input id="link" type="text" placeholder="Enter Link" class="form-control" name="link">
                                                 </div>
                                             </div>
                                         </div>
@@ -241,6 +251,7 @@
                 {
                     id: '{{ event.id }}',
                     title: '{{ event.name }}',
+                    link: '{{ event.link }}',
                     start: '{{ event.startdate | date('Y-m-d H:i') }}',
                     end: '{{ event.enddate | date('Y-m-d H:i') }}',
                     className:
@@ -277,15 +288,18 @@
 
             function updateEvent(){
                 let formData = $('#eventModal').serializeArray();
-
-                $.ajax({
-                    url: '/updateEvent/' + $("#eventId").val(),
-                    type: "POST",
-                    data: objectifyForm(formData),
-                    success: function (data) {
-                        location.reload();
-                    }
-                })
+                if($("input[name='trainer']:checked").val() && $("start-date").val() && $("end-date").val()){
+                    $.ajax({
+                        url: '/updateEvent/' + $("#eventId").val(),
+                        type: "POST",
+                        data: objectifyForm(formData),
+                        success: function (data) {
+                            location.reload();
+                        }
+                    })
+                }else{
+                    alert("Toate campurile sunt obligatorii!");
+                }
             }
 
             function deleteEvent(){
