@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('theme/assets/css/forms/theme-checkbox-radio.css') }}"/>
     <link href="{{ asset('theme/assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('theme/assets/css/forms/switches.css') }}" rel="stylesheet" type="text/css">
 
     <!-- END PAGE LEVEL STYLES -->
     <style>
@@ -92,11 +93,22 @@
 
                                     <form class="" id="eventModal">
 
+                                        <div class="row" id="recursive-checkbox">
+                                            <div class="col-md-6">
+                                                <label for="start-date" class="">Recursive event:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="switch s-icons s-outline s-outline-success mr-2">
+                                                    <input type="checkbox" name="recursive" id="recursive">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label for="start-date" class="">Event Title:</label>
                                                 <div class="d-flex event-title">
-{#                                                    <input id="write-e" type="text" placeholder="Enter Title" class="form-control" name="task">#}
                                                     <select id="write-e" name="name" class="selectpicker form-control mt-2 mb-2" data-live-search="true">
                                                         {% for membership in memberships %}
                                                             <option value="{{ membership.name }}">{{ membership.name }}</option>
@@ -128,11 +140,24 @@
 
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <label for="start-date" class="">Event Title:</label>
+                                                <label for="start-date" class="">Event Link:</label>
                                                 <div class="d-flex event-title">
                                                     <input id="link" type="text" placeholder="Enter Link" class="form-control" name="link">
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div class="row" id="recursive-row" style="display: none">
+                                            <div class="col-md-12">
+                                                <div class="form-group end-date">
+                                                    <label for="end-date" class="">Recursive until:</label>
+                                                    <div class="d-flex">
+                                                        <input id="recursive-end-date" name="recursive-end-date" placeholder="Recursive End Date" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
                                         </div>
 
                                         <div class="row">
@@ -212,39 +237,6 @@
     {% block javascripts %}
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         <script>
-            // newDate = new Date()
-            // monthArray = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' ]
-            //
-            // function getDynamicMonth( monthOrder ) {
-            //     var getNumericMonth = parseInt(monthArray[newDate.getMonth()]);
-            //     var getNumericMonthInc = parseInt(monthArray[newDate.getMonth()]) + 1;
-            //     var getNumericMonthDec = parseInt(monthArray[newDate.getMonth()]) - 1;
-            //
-            //     if (monthOrder === 'default') {
-            //
-            //         if (getNumericMonth < 10 ) {
-            //             return '0' + getNumericMonth;
-            //         } else if (getNumericMonth >= 10) {
-            //             return getNumericMonth;
-            //         }
-            //
-            //     } else if (monthOrder === 'inc') {
-            //
-            //         if (getNumericMonthInc < 10 ) {
-            //             return '0' + getNumericMonthInc;
-            //         } else if (getNumericMonthInc >= 10) {
-            //             return getNumericMonthInc;
-            //         }
-            //
-            //     } else if (monthOrder === 'dec') {
-            //
-            //         if (getNumericMonthDec < 10 ) {
-            //             return '0' + getNumericMonthDec;
-            //         } else if (getNumericMonthDec >= 10) {
-            //             return getNumericMonthDec;
-            //         }
-            //     }
-            // }
 
             var eventsList = [
                 {% for event in events %}
@@ -254,12 +246,15 @@
                     link: '{{ event.link }}',
                     start: '{{ event.startdate | date('Y-m-d H:i') }}',
                     end: '{{ event.enddate | date('Y-m-d H:i') }}',
-                    className:
-                            {% if event.trainer.name == 'Robert' %} "bg-warning", {% endif %}
-                            {% if event.trainer.name == 'Emilia' %} "bg-primary", {% endif %}
-                            {% if event.trainer.name == 'Flavia' %} "bg-success", {% endif %}
-                            {% if event.trainer.name == 'Vlad' %} "bg-danger", {% endif %}
-                    description: '{{ event.trainer.name }}'
+                    className:{% if event.trainer %}
+                                    {% if event.trainer.name == 'Robert' %} "bg-warning", {% endif %}
+                                    {% if event.trainer.name == 'Emilia' %} "bg-primary", {% endif %}
+                                    {% if event.trainer.name == 'Flavia' %} "bg-success", {% endif %}
+                                    {% if event.trainer.name == 'Vlad' %} "bg-danger", {% endif %}
+                               {% else %}
+                                    "bg-primary",
+                               {% endif %}
+                    description: {% if event.trainer %} '{{ event.trainer.name }}' {% else %} 'No trainer! ' {% endif %}
                 },
                 {% endfor %}
             ];
@@ -276,19 +271,23 @@
             function sendEvent(){
                 let formData = $('#eventModal').serializeArray();
 
-                $.ajax({
-                    url: '/createEvent/',
-                    type: "POST",
-                    data: objectifyForm(formData),
-                    success: function (data) {
-                        //location.reload();
-                    }
-                })
+                if($("#start-date").val() && $("#end-date").val()) {
+                    $.ajax({
+                        url: '/createEvent/',
+                        type: "POST",
+                        data: objectifyForm(formData),
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }else{
+                    alert("Please enter start date and end date");
+                }
             }
 
             function updateEvent(){
                 let formData = $('#eventModal').serializeArray();
-                if($("input[name='trainer']:checked").val() && $("start-date").val() && $("end-date").val()){
+                if($("#start-date").val() && $("#end-date").val()){
                     $.ajax({
                         url: '/updateEvent/' + $("#eventId").val(),
                         type: "POST",
@@ -296,9 +295,9 @@
                         success: function (data) {
                             location.reload();
                         }
-                    })
+                    });
                 }else{
-                    alert("Toate campurile sunt obligatorii!");
+                    alert("Please enter start date and end date");
                 }
             }
 
@@ -320,5 +319,15 @@
                 }
                 return returnArray;
             }
+
+            $( document ).ready(function() {
+                $('#recursive').change(function (){
+                    if(this.checked){
+                        $('#recursive-row').css('display', 'block');
+                    }else{
+                        $('#recursive-row').css('display', 'none');
+                    }
+                });
+            });
         </script>
     {% endblock %}

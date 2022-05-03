@@ -30,6 +30,9 @@ $(document).ready(function() {
     // Get the all <textarea> elements insdie the modal
     var textarea = document.getElementsByTagName('textarea');
 
+    var recursive_row = document.getElementById('recursive-row');
+    var recursive_checkbox = document.getElementById('recursive-checkbox');
+
     // Create BackDrop ( Overlay ) Element
     function createBackdropElement () {
         var btn = document.createElement("div");
@@ -65,6 +68,7 @@ $(document).ready(function() {
     btn.onclick = function() {
         modal.style.display = "block";
         addEvent.style.display = 'block';
+        recursive_checkbox.style.display = 'block';
         editEvent.style.display = 'none';
         deleteEvent.style.display = 'none';
         addEventTitle.style.display = 'block';
@@ -130,6 +134,8 @@ $(document).ready(function() {
             deleteEvent.style.display = 'block';
 
             addEventTitle.style.display = 'none';
+            recursive_checkbox.style.display = 'none';
+            recursive_row.style.display = 'none';
             editEventTitle.style.display = 'block';
             modal.style.display = "block";
             document.getElementsByTagName('body')[0].style.overflow = 'hidden';
@@ -181,6 +187,10 @@ $(document).ready(function() {
                 minDate: info.start.format("YYYY-MM-DD HH:mm:ss")
             });
 
+
+
+
+
             $('#edit-event').off('click').on('click', function(event) {
                 event.preventDefault();
                 /* Act on the event */
@@ -224,6 +234,12 @@ $(document).ready(function() {
         })
 
         var endtDate = flatpickr(document.getElementById('end-date'), {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: new Date()
+        });
+
+        var endRDate = flatpickr(document.getElementById('recursive-end-date'), {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             minDate: new Date()

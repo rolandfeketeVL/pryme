@@ -54,22 +54,57 @@ class CalendarController extends AbstractController
     #[Route('/createEvent/', name: 'createEvent', methods: ['POST', 'GET', 'HEAD'])]
     public function createEvent(Request $request): Response
     {
-        $event = new Event();
-
         if($request->getContent())
         {
+            $event = new Event();
+
             $startdate = DateTime::createFromFormat('Y-m-d H:i', $request->request->get('start-date'));
             $enddate = DateTime::createFromFormat('Y-m-d H:i', $request->request->get('end-date'));
 
             $event->setName($request->request->get('name'));
             $event->setLink($request->request->get('link'));
-            $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
+            if($request->request->get('trainer')){
+                $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
+            }
             $event->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
             $event->setStartdate($startdate);
             $event->setEnddate($enddate);
 
             $this->em->persist($event);
             $this->em->flush();
+
+            // If the event is recursive, create the other events
+            if($request->request->get('recursive') == 'on'){
+                $recursiveEnd = DateTime::createFromFormat('Y-m-d H:i', $request->request->get('recursive-end-date'));
+
+                date_add($startdate, date_interval_create_from_date_string('7 days'));
+                date_add($enddate, date_interval_create_from_date_string('7 days'));
+
+                $events = array();
+
+                $i = 0;
+
+                while($enddate <= $recursiveEnd){
+
+                    $events[] = new Event();
+                    $events[$i]->setName($request->request->get('name'));
+                    $events[$i]->setLink($request->request->get('link'));
+                    if($request->request->get('trainer')){
+                        $events[$i]->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
+                    }
+                    $events[$i]->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
+                    $events[$i]->setStartdate($startdate);
+                    $events[$i]->setEnddate(($enddate));
+
+                    $this->em->persist($events[$i]);
+                    $this->em->flush();
+
+                    date_add($startdate, date_interval_create_from_date_string('7 days'));
+                    date_add($enddate, date_interval_create_from_date_string('7 days'));
+
+                    $i++;
+                }
+            }
             return new JsonResponse('OK', JsonResponse::HTTP_OK);
         }
 
@@ -88,7 +123,9 @@ class CalendarController extends AbstractController
 
             $event->setName($request->request->get('name'));
             $event->setLink($request->request->get('link'));
-            $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
+            if($request->request->get('trainer')){
+                $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
+            }
             $event->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
             $event->setStartdate($startdate);
             $event->setEnddate($enddate);
