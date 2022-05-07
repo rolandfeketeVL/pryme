@@ -30,17 +30,14 @@ class Membership
     #[ORM\Column(type: 'smallint')]
     private $minutes;
 
-    #[ORM\ManyToMany(targetEntity: Benefits::class, inversedBy: 'memberships')]
-    private $benefits;
-
     #[ORM\OneToMany(mappedBy: 'membership', targetEntity: Users::class)]
     private $users;
 
     #[ORM\Column(type: 'smallint')]
     private $valability;
 
-    #[ORM\OneToMany(mappedBy: 'membership', targetEntity: Event::class)]
-    private $events;
+    #[ORM\ManyToOne(targetEntity: MembershipGroup::class, inversedBy: 'memberships')]
+    private $membershipGroup;
 
 
     public function __construct()
@@ -117,30 +114,6 @@ class Membership
     }
 
     /**
-     * @return Collection<int, Benefits>
-     */
-    public function getBenefits(): Collection
-    {
-        return $this->benefits;
-    }
-
-    public function addBenefit(Benefits $benefit): self
-    {
-        if (!$this->benefits->contains($benefit)) {
-            $this->benefits[] = $benefit;
-        }
-
-        return $this;
-    }
-
-    public function removeBenefit(Benefits $benefit): self
-    {
-        $this->benefits->removeElement($benefit);
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Users>
      */
     public function getUsers(): Collection
@@ -182,32 +155,14 @@ class Membership
         return $this;
     }
 
-    /**
-     * @return Collection<int, Event>
-     */
-    public function getEvents(): Collection
+    public function getMembershipGroup(): ?MembershipGroup
     {
-        return $this->events;
+        return $this->membershipGroup;
     }
 
-    public function addEvent(Event $event): self
+    public function setMembershipGroup(?MembershipGroup $membershipGroup): self
     {
-        if (!$this->events->contains($event)) {
-            $this->events[] = $event;
-            $event->setMembership($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvent(Event $event): self
-    {
-        if ($this->events->removeElement($event)) {
-            // set the owning side to null (unless already changed)
-            if ($event->getMembership() === $this) {
-                $event->setMembership(null);
-            }
-        }
+        $this->membershipGroup = $membershipGroup;
 
         return $this;
     }

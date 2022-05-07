@@ -107,11 +107,12 @@
 
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <label for="start-date" class="">Event Title:</label>
+                                                <label for="write-e" class="">Event Membership Group:</label>
                                                 <div class="d-flex event-title">
                                                     <select id="write-e" name="name" class="selectpicker form-control mt-2 mb-2" data-live-search="true">
-                                                        {% for membership in memberships %}
-                                                            <option value="{{ membership.name }}">{{ membership.name }}</option>
+                                                        <option value="0">Select Membership Group</option>
+                                                        {% for membershipsGroup in membershipsGroups %}
+                                                            <option value="{{ membershipsGroup.name }}">{{ membershipsGroup.name }}</option>
                                                         {% endfor %}
                                                     </select>
                                                     <input type="hidden" name="eventId" id="eventId">

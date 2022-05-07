@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Membership;
 use App\Repository\EventRepository;
+use App\Repository\MembershipGroupRepository;
 use App\Repository\MembershipRepository;
 use App\Repository\TrainerRepository;
 use App\Service\MembershipService;
@@ -24,26 +25,30 @@ class CalendarController extends AbstractController
     private MembershipRepository $membershipRepository;
     private TrainerRepository $trainerRepository;
     private MembershipService $membershipService;
+    private MembershipGroupRepository $membershipGroupRepository;
 
-    public function __construct(EntityManagerInterface $em, MembershipRepository $membershipRepository, MembershipService $membershipService, TrainerRepository $trainerRepository, EventRepository $eventRepository)
+    public function __construct(EntityManagerInterface $em, MembershipRepository $membershipRepository, MembershipService $membershipService, TrainerRepository $trainerRepository, EventRepository $eventRepository, MembershipGroupRepository $membershipGroupRepository)
     {
         $this->em = $em;
         $this->membershipRepository = $membershipRepository;
         $this->membershipService = $membershipService;
         $this->trainerRepository = $trainerRepository;
         $this->eventRepository = $eventRepository;
+        $this->membershipGroupRepository = $membershipGroupRepository;
     }
 
     #[Route('/calendar', name: 'calendar')]
     public function index(): Response
     {
         $memberships = $this->membershipRepository->findAll();
+        $membershipsGroups = $this->membershipGroupRepository->findAll();
         $trainers = $this->trainerRepository->findAll();
         $events = $this->eventRepository->findAll();
         //dd($events);
 
         $data = [
             'memberships' => $memberships,
+            'membershipsGroups' => $membershipsGroups,
             'trainers' => $trainers,
             'events' => $events
         ];
@@ -66,7 +71,8 @@ class CalendarController extends AbstractController
             if($request->request->get('trainer')){
                 $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
             }
-            $event->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
+            //$event->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
+            $event->setMembershipsGroup($this->membershipGroupRepository->findOneBy(['name' => $request->request->get('name')]));
             $event->setStartdate($startdate);
             $event->setEnddate($enddate);
 
@@ -92,7 +98,7 @@ class CalendarController extends AbstractController
                     if($request->request->get('trainer')){
                         $events[$i]->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
                     }
-                    $events[$i]->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
+                    $events[$i]->setMembershipsGroup($this->membershipGroupRepository->findOneBy(['name' => $request->request->get('name')]));
                     $events[$i]->setStartdate($startdate);
                     $events[$i]->setEnddate(($enddate));
 
@@ -126,7 +132,7 @@ class CalendarController extends AbstractController
             if($request->request->get('trainer')){
                 $event->setTrainer($this->trainerRepository->find($request->request->get('trainer')));
             }
-            $event->setMembership($this->membershipRepository->findOneBy(['name' => $request->request->get('name')]));
+            $event->setMembershipsGroup($this->membershipGroupRepository->findOneBy(['name' => $request->request->get('name')]));
             $event->setStartdate($startdate);
             $event->setEnddate($enddate);
 

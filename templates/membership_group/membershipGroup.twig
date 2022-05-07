@@ -1,0 +1,238 @@
+{% extends "baseAdmin.html.twig" %}
+
+{% block title %}
+    Memberships - PRYME
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/datatables.css">
+    <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/theme-checkbox-radio.css">
+    <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/dt-global_style.css">
+    <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/custom_dt_custom.css">
+    <link rel="stylesheet" type="text/css" href="theme/plugins/animate/animate.css"/>
+    <link href="theme/assets/css/scrollspyNav.css" rel="stylesheet" type="text/css" />
+    <link href="theme/assets/css/components/custom-modal.css" rel="stylesheet" type="text/css" />
+    <link href="theme/plugins/file-upload/file-upload-with-preview.min.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL STYLES -->
+{% endblock %}
+
+{% block body %}
+<!-- BEGIN LOADER -->
+<div id="load_screen"> <div class="loader"> <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div></div></div>
+<!--  END LOADER -->
+
+
+{%  include "dashboard/header.html.twig" %}
+
+<!--  BEGIN MAIN CONTAINER  -->
+<div class="main-container" id="container">
+
+    <div class="overlay"></div>
+    <div class="search-overlay"></div>
+
+    {% include "dashboard/navbar.html.twig" %}
+
+    <!--  BEGIN CONTENT AREA  -->
+    <div id="content" class="main-content">
+        <div class="layout-px-spacing">
+
+            <div class="row layout-top-spacing">
+                <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                    <div class="widget-content widget-content-area br-6">
+                        <button class="btn btn-primary m-2 btn-sm" data-toggle="modal" data-target="#editModal" onclick="ClearModal();">Add Membership Group</button>
+                    </div>
+                    <div class="widget-content widget-content-area br-6">
+
+                        <table id="multi-column-ordering" class="table table-hover style-3" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Benefit</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for membershipGroup in membershipGroups %}
+                                <tr>
+                                    <td>{{ membershipGroup.name }}</td>
+                                    <td><a href="{{ membershipGroup.benefitLink }}" class="btn btn-secondary mb-4 mr-2" target="_blank">Benefit</a> </td>
+                                    <td class="text-center">
+                                        <ul class="table-controls">
+                                            <li><a href="javascript:void(0);" class="bs-tooltip" data-toggle="modal" data-target="#editModal" onclick="populateModal({{ membershipGroup.id }});" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 p-1 br-6 mb-1"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a></li>
+                                            <li><a href="javascript:void(0);" class="bs-tooltip" data-placement="top" title="" onclick="deleteMembership({{ membershipGroup.id }});" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash p-1 br-6 mb-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Benefit</th>
+                                <th>Action</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © 2022 <a target="_blank" href="http://pryme.fit">Pryme</a>, All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+    <!--  END CONTENT AREA  -->
+</div>
+<!-- END MAIN CONTAINER -->
+
+
+<!-- EDIT CLIENT MODAL -->
+<div class="modal fade bd-example-modal-xl bd-example-modal show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header" id="editModalLabel">
+                <h4 class="modal-title">Edit Membership</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="flFormsGrid" class="col-lg-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+
+                            <div class="widget-content widget-content-area">
+                                <form method="get" id="updateMembershipGroup">
+                                    <div class="form-row mb-4">
+                                        <div class="form-group col-md-12">
+                                            <label for="name">Name</label>
+                                            <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row mb-4">
+                                        <div class="form-group col-md-12">
+                                            <label for="price">Link</label>
+                                            <input type="text" class="form-control" name="benefitLink" id="benefitLink" placeholder="Benefit Link">
+                                        </div>
+                                    </div>
+
+
+                                    <input type="hidden" id="membershipGroupID">
+                                    <button type="button" id="editMembershipGroupSubmit" class="btn btn-primary mt-3">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    {% endblock %}
+
+
+    {% block javascripts %}
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        <script src="theme/plugins/table/datatable/datatables.js"></script>
+        <script src="theme/assets/js/scrollspyNav.js"></script>
+        <script src="theme/plugins/file-upload/file-upload-with-preview.min.js"></script>
+        <script>
+
+            $('#multi-column-ordering').DataTable({
+                "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+                    "<'table-responsive'tr>" +
+                    "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+                "oLanguage": {
+                    "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                    "sInfo": "Showing page _PAGE_ of _PAGES_",
+                    "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                    "sSearchPlaceholder": "Search...",
+                    "sLengthMenu": "Results :  _MENU_",
+                },
+                "stripeClasses": [],
+                "lengthMenu": [10, 20, 50],
+                "pageLength": 10,
+                columnDefs: [ {
+                    targets: [ 0 ],
+                    orderData: [ 0, 1 ]
+                }, {
+                    targets: [ 1 ],
+                    orderData: [ 1, 0 ]
+                }, {
+                    targets: [ 2 ],
+                    orderData: [ 4, 0 ]
+                } ]
+            });
+
+            $('#editMembershipGroupSubmit').click(function (){
+                let url;
+
+                if($("#membershipGroupID").val() == 0) {
+                    url = '/createMembershipGroup/';
+                } else {
+                    url = '/updateMembershipGroup/' + $("#membershipGroupID").val();
+                }
+
+                let formData = $('#updateMembershipGroup').serializeArray();
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: objectifyForm(formData),
+                    success: function (data) {
+                        location.reload();
+                    }
+                })
+            })
+
+            function objectifyForm(formArray) {
+                let returnArray = {};
+                for (let i = 0; i < formArray.length; i++){
+                    returnArray[formArray[i]['name']] = formArray[i]['value'];
+                }
+                return returnArray;
+            }
+
+            function populateModal(id) {
+                $("#membershipGroupID").val(id);
+                $.ajax({
+                    url: '/updateMembershipGroup/' + id,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(membershipGroup) {
+                        console.log((membershipGroup));
+                        $("#name").val(membershipGroup.name);
+                        $("#benefitLink").val(membershipGroup.benefitLink);
+                    }
+                });
+            }
+
+            function deleteMembership(id){
+                $.ajax({
+                    url: '/deleteMembershipGroup/' + id,
+                    type: "GET",
+                    success: function (data) {
+                        location.reload();
+                    }
+                })
+            }
+
+            function ClearModal(){
+                $("#name").val("");
+                $("#benefitLink").val("");
+                $("#membershipGroupID").val(0);
+            }
+        </script>
+        <!-- END PAGE LEVEL SCRIPTS -->
+    {% endblock %}

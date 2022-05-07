@@ -15,6 +15,12 @@ class MembershipService
         $m->persons_no = $membership->getPersonsNo();
         $m->minutes = $membership->getMinutes();
         $m->valability = $membership->getValability();
+        if($membership->getMembershipGroup()){
+            $m->membershipGroupId = $membership->getMembershipGroup()->getId();
+        }else{
+            $m->membershipGroupId = 0;
+        }
+
 
         return $m;
     }

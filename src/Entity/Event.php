@@ -22,14 +22,14 @@ class Event
     #[ORM\Column(type: 'datetime')]
     private $enddate;
 
-    #[ORM\ManyToOne(targetEntity: Membership::class, inversedBy: 'events')]
-    private $membership;
-
     #[ORM\ManyToOne(targetEntity: Trainer::class, inversedBy: 'events')]
     private $trainer;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private $link;
+
+    #[ORM\ManyToOne(targetEntity: MembershipGroup::class, inversedBy: 'events')]
+    private $membershipsGroup;
 
     public function getId(): ?int
     {
@@ -72,18 +72,6 @@ class Event
         return $this;
     }
 
-    public function getMembership(): ?Membership
-    {
-        return $this->membership;
-    }
-
-    public function setMembership(?Membership $membership): self
-    {
-        $this->membership = $membership;
-
-        return $this;
-    }
-
     public function getTrainer(): ?Trainer
     {
         return $this->trainer;
@@ -104,6 +92,18 @@ class Event
     public function setLink(?string $link): self
     {
         $this->link = $link;
+
+        return $this;
+    }
+
+    public function getMembershipsGroup(): ?MembershipGroup
+    {
+        return $this->membershipsGroup;
+    }
+
+    public function setMembershipsGroup(?MembershipGroup $membershipsGroup): self
+    {
+        $this->membershipsGroup = $membershipsGroup;
 
         return $this;
     }

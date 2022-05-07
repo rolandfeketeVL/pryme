@@ -14,6 +14,7 @@
     <link href="theme/assets/css/scrollspyNav.css" rel="stylesheet" type="text/css" />
     <link href="theme/assets/css/components/custom-modal.css" rel="stylesheet" type="text/css" />
     <link href="theme/plugins/file-upload/file-upload-with-preview.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL STYLES -->
 {% endblock %}
 
@@ -127,14 +128,19 @@
                                                 <label for="name">Name</label>
                                                 <input type="text" class="form-control" name="name" id="name" placeholder="Name">
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="credits">Credits</label>
-                                                <input type="number" class="form-control" name="credits" id="credits" placeholder="Credits">
+                                            <div class="form-group col-md-6">
+                                                <label for="membershipGroup">Group</label>
+
+                                                    <select id="membershipGroup" name="membershipGroup" class="selectpicker form-control" data-live-search="true">
+                                                        <option value="0">Select Membership Group</option>
+                                                        {% for membershipGroup in membershipGroups %}
+                                                            <option value="{{ membershipGroup.id }}">{{ membershipGroup.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+
                                             </div>
-                                            <div class="form-group col-md-2">
-                                                <label for="valability">Availability</label>
-                                                <input type="number" class="form-control" name="valability" id="valability" placeholder="Months">
-                                            </div>
+
+
                                         </div>
 
                                         <div class="form-row mb-4">
@@ -142,11 +148,19 @@
                                                 <label for="price">Price</label>
                                                 <input type="number" class="form-control" name="price" id="price" placeholder="Price">
                                             </div>
-                                            <div class="form-group col-md-4">
+                                            <div class="form-group col-md-2">
+                                                <label for="credits">Credits</label>
+                                                <input type="number" class="form-control" name="credits" id="credits" placeholder="Credits">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="valability">Availability</label>
+                                                <input type="number" class="form-control" name="valability" id="valability" placeholder="Months">
+                                            </div>
+                                            <div class="form-group col-md-2">
                                                 <label for="personsNo">Persons no.</label>
                                                 <input type="number" class="form-control" name="personsNo" id="personsNo" placeholder="Persons no.">
                                             </div>
-                                            <div class="form-group col-md-4">
+                                            <div class="form-group col-md-2">
                                                 <label for="minutes">Duration</label>
                                                 <input type="number" class="form-control" name="minutes" id="minutes" placeholder="Min">
                                             </div>
@@ -175,6 +189,7 @@
     <script src="theme/plugins/table/datatable/datatables.js"></script>
     <script src="theme/assets/js/scrollspyNav.js"></script>
     <script src="theme/plugins/file-upload/file-upload-with-preview.min.js"></script>
+    <script src="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.js') }}"></script>
     <script>
 
         $('#multi-column-ordering').DataTable({
@@ -246,6 +261,7 @@
                     $("#price").val(membership.price);
                     $("#personsNo").val(membership.persons_no);
                     $("#minutes").val(membership.minutes);
+                    $("#membershipGroup").selectpicker('val', membership.membershipGroupId);
                 }
             });
         }

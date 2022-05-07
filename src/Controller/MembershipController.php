@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Membership;
+use App\Repository\MembershipGroupRepository;
 use App\Repository\MembershipRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,12 +18,14 @@ class MembershipController extends AbstractController
     private EntityManagerInterface $em;
     private MembershipRepository $MembershipRepository;
     private MembershipService $membershipService;
+    private MembershipGroupRepository $membershipGroupRepository;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, MembershipRepository $membershipRepository, MembershipService $membershipService, MembershipGroupRepository $membershipGroupRepository)
     {
         $this->em = $em;
-        $this->MembershipRepository = $this->em->getRepository(Membership::class);
-        $this->membershipService = new MembershipService();
+        $this->MembershipRepository = $membershipRepository;
+        $this->membershipService = $membershipService;
+        $this->membershipGroupRepository = $membershipGroupRepository;
     }
 
     #[Route('/membership', name: 'membership')]
@@ -30,9 +33,11 @@ class MembershipController extends AbstractController
     {
 
         $memberships = $this->MembershipRepository->findAll();
+        $membershipGroups = $this->membershipGroupRepository->findAll();
 
         $data = [
-            'memberships' => $memberships
+            'memberships' => $memberships,
+            'membershipGroups' => $membershipGroups
         ];
         return $this->render('membership/membership.html.twig', $data);
     }
@@ -51,6 +56,7 @@ class MembershipController extends AbstractController
             $membership->setPrice($request->request->get('price'));
             $membership->setPersonsNo($request->request->get('personsNo'));
             $membership->setMinutes($request->request->get('minutes'));
+            $membership->setMembershipGroup($this->membershipGroupRepository->find($request->request->get('membershipGroup')));
 
             $this->em->flush();
             return new JsonResponse('OK', JsonResponse::HTTP_OK);
@@ -72,6 +78,7 @@ class MembershipController extends AbstractController
             $membership->setPrice($request->request->get('price'));
             $membership->setPersonsNo($request->request->get('personsNo'));
             $membership->setMinutes($request->request->get('minutes'));
+            $membership->setMembershipGroup($this->membershipGroupRepository->find($request->request->get('membershipGroup')));
 
             $this->em->persist($membership);
             $this->em->flush();
