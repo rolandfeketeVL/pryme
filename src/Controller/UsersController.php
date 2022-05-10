@@ -2,37 +2,41 @@
 
 namespace App\Controller;
 
-use App\Entity\Membership;
-use App\Entity\Users;
+use App\Repository\MembershipRepository;
+use App\Repository\UserRepository;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use DateTime;
 
 class UsersController extends AbstractController
 {
-    private $em;
-    public function __construct(EntityManagerInterface $em)
+    private EntityManagerInterface $em;
+    private MembershipRepository $membershipRepository;
+    private UserRepository $userRepository;
+    private UserService $userService;
+
+    public function __construct(EntityManagerInterface $em, UserRepository $userRepository, MembershipRepository $membershipRepository, UserService $userService)
     {
         $this->em = $em;
+        $this->membershipRepository = $membershipRepository;
+        $this->userRepository = $userRepository;
+        $this->userService = $userService;
     }
 
     #[Route('/users', name: 'app_users')]
     public function index(): Response
     {
-        $UserRepository = $this->em->getRepository(Users::class);
-        $MembershipRepository = $this->em->getRepository(Membership::class);
-        $clients = $UserRepository->findByRole("client");
-
-        foreach ($clients as $client)
-        {
-            $client->setMembership($MembershipRepository->findOneById($client->getMembership()->getId()));
-        }
+        $clients = $this->userRepository->findByRole("client");
+        $memberships = $this->membershipRepository->findAll();
 
         $data = [
-            "clients" => $clients
+            "clients" => $clients,
+            "memberships" => $memberships
         ];
 
         return $this->render('users/clients.html.twig', $data);
@@ -41,8 +45,8 @@ class UsersController extends AbstractController
     #[Route('/updateClient/{id}', name: 'updateClient', methods: ['POST', 'GET', 'HEAD'])]
     public function updateClient(Request $request, $id): Response
     {
-        $UserRepository = $this->em->getRepository(Users::class);
-        $client = $UserRepository->find($id);
+        $client = $this->userRepository->find($id);
+        $clientPrepared = $this->userService->prepareUser($client);
 
         if($request->getContent())
         {
@@ -55,12 +59,15 @@ class UsersController extends AbstractController
             $client->setZip($request->request->get('zip'));
             $client->setState($request->request->get('state'));
             $client->setCountry($request->request->get('country'));
+            $client->setMembership($this->membershipRepository->find($request->request->get('membership')));
+            $client->setCreditsRemaining($request->request->get('credits'));
+            $client->setMembershipExpiryDate(DateTime::createFromFormat('Y-m-d', $request->request->get('membership_expiration')));
 
             $this->em->flush();
             return new JsonResponse('OK', JsonResponse::HTTP_OK);
         }
 
-        return new JsonResponse($client, JsonResponse::HTTP_OK);
+        return new JsonResponse($clientPrepared, JsonResponse::HTTP_OK);
     }
 
 }

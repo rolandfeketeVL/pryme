@@ -1,0 +1,255 @@
+{% extends "baseAdmin.html.twig" %}
+
+{% block title %}
+    Calendar - PRYME
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/fullcalendar/fullcalendar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/fullcalendar/custom-fullcalendar.advance.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/flatpickr/flatpickr.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/flatpickr/custom-flatpickr.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/assets/css/forms/theme-checkbox-radio.css') }}"/>
+    <link href="{{ asset('theme/assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('theme/assets/css/forms/switches.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('theme/assets/css/elements/alert.css') }}" rel="stylesheet" type="text/css">
+
+    <!-- END PAGE LEVEL STYLES -->
+    <style>
+        .widget-content-area { border-radius: 6px;
+            -webkit-box-shadow: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.2);
+            -moz-box-shadow: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.2);
+            box-shadow: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.2); margin-bottom: 10px; }
+        .daterangepicker.dropdown-menu {
+            z-index: 1059;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<!-- BEGIN LOADER -->
+<div id="load_screen"> <div class="loader"> <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div></div></div>
+<!--  END LOADER -->
+
+
+{%  include "dashboard/header.html.twig" %}
+
+<!--  BEGIN CONTENT AREA  -->
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        {% include "dashboard/navbar.html.twig" %}
+
+
+    <div id="content" class="main-content">
+    <div class="layout-px-spacing">
+        <div class="row layout-top-spacing" id="cancel-row">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-content widget-content-area">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Modal -->
+            <div id="addEventsModal" class="modal animated fadeIn">
+
+                <div class="modal-dialog modal-dialog-centered">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+
+                            <span class="close">&times;</span>
+
+                            <div class="add-edit-event-box">
+                                <div class="add-edit-event-content">
+                                    <h5 class="edit-event-title modal-title"><span id="event-name">Private Robert</span></h5>
+
+                                    <form class="" id="eventModal">
+
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-12">
+                                                <div class="form-group start-date">
+                                                    <label for="start-date" class="">From:</label>
+                                                    <div class="d-flex">
+                                                        <input id="start-date" name="start-date" placeholder="Start Date" class="form-control" type="text" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6 col-12">
+                                                <div class="form-group end-date">
+                                                    <label for="end-date" class="">To:</label>
+                                                    <div class="d-flex">
+                                                        <input id="end-date" name="end-date" placeholder="End Date" type="text" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+{#                                        <div class="row">#}
+{#                                            <div class="col-md-12">#}
+{#                                                <label for="start-date" class="">Event Link:</label>#}
+{#                                                <div class="d-flex event-title">#}
+{#                                                    <input id="link" type="text" placeholder="Enter Link" class="form-control" name="link">#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+
+
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="event-badge">
+                                                    <p class="">Trainer: <span id="trainer-name"></span></p>
+                                                    <input type="hidden" name="eventId" id="eventId">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" id="registered-message" style="display:none;">
+                                            <div class="alert alert-light-success border-0 mb-4 col-md-12" role="alert">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                                You are already registered to this event!
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button id="discard" class="btn" data-dismiss="modal">Discard</button>
+{#                            <button id="add-e" class="btn" onclick="sendEvent()">Add Event</button>#}
+                            <button id="register" onclick="createAppointment()" class="btn btn-success">Register</button>
+                            <button id="delete-appointment" onclick="deleteAppointment()" class="btn btn-danger" style="display: none">Unregister</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        </div>
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © 2022 <a target="_blank" href="http://pryme.fit">Pryme</a>, All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+    <!--  END CONTENT AREA  -->
+</div>
+<!-- END MAIN CONTAINER -->
+
+    {% endblock %}
+
+
+    {% block javascripts %}
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        <script>
+
+            var eventsList = [
+                {% for event in events %}
+                {
+                    id: '{{ event.id }}',
+                    title: '{{ event.name }}',
+                    link: '{{ event.link }}',
+                    start: '{{ event.startdate | date('Y-m-d H:i') }}',
+                    end: '{{ event.enddate | date('Y-m-d H:i') }}',
+                    appointed: {% if event.id in appointedEvents %} 1, {% else %} 0, {% endif %}
+                    className:{% if event.id in appointedEvents %}
+                                    "bg-registered",
+                                {% else %}
+                                    {% if event.trainer %}
+                                        {% if event.trainer.name == 'Robert' %} "bg-warning", {% endif %}
+                                        {% if event.trainer.name == 'Emilia' %} "bg-primary", {% endif %}
+                                        {% if event.trainer.name == 'Flavia' %} "bg-success", {% endif %}
+                                        {% if event.trainer.name == 'Vlad' %} "bg-danger", {% endif %}
+                                   {% else %}
+                                        "bg-primary",
+                                   {% endif %}
+                                {% endif %}
+                    description: {% if event.trainer %} '{{ event.trainer.name }}' {% else %} 'No trainer! ' {% endif %}
+                },
+                {% endfor %}
+            ];
+        </script>
+        <script src="{{ asset('theme/plugins/fullcalendar/moment.min.js') }}"></script>
+        <script src="{{ asset('theme/plugins/flatpickr/flatpickr.js') }}"></script>
+        <script src="{{ asset('theme/plugins/fullcalendar/fullcalendar.min.js') }}"></script>
+        <script src="{{ asset('theme/plugins/fullcalendar/appointments-fullcalendar.advance.js') }}"></script>
+        <script src="{{ asset('theme/assets/js/scrollspyNav.js') }}"></script>
+        <script src="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.js') }}"></script>
+        <!-- END PAGE LEVEL SCRIPTS -->
+
+        <script>
+            function sendEvent(){
+                let formData = $('#eventModal').serializeArray();
+
+                if($("#start-date").val() && $("#end-date").val()) {
+                    $.ajax({
+                        url: '/createEvent/',
+                        type: "POST",
+                        data: objectifyForm(formData),
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }else{
+                    alert("Please enter start date and end date");
+                }
+            }
+
+            function createAppointment(){
+                $.ajax({
+                    url: '/createAppointment/' + $("#eventId").val() + '/' + {{ user_id }},
+                    type: "POST",
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            }
+
+            function deleteAppointment(){
+                $.ajax({
+                    url: '/deleteAppointment/' + $("#eventId").val() + '/' + {{ user_id }},
+                    type: "GET",
+                    success: function (data) {
+                        location.reload();
+                    }
+                })
+            }
+
+
+            function objectifyForm(formArray) {
+                let returnArray = {};
+                for (let i = 0; i < formArray.length; i++){
+                    returnArray[formArray[i]['name']] = formArray[i]['value'];
+                }
+                return returnArray;
+            }
+
+            $( document ).ready(function() {
+                $('#recursive').change(function (){
+                    if(this.checked){
+                        $('#recursive-row').css('display', 'block');
+                    }else{
+                        $('#recursive-row').css('display', 'none');
+                    }
+                });
+            });
+        </script>
+    {% endblock %}

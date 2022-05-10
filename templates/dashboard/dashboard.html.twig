@@ -6,8 +6,8 @@
 
 {% block stylesheets %}
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
-    <link href="theme/plugins/apex/apexcharts.css" rel="stylesheet" type="text/css">
-    <link href="theme/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('theme/plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('theme/assets/css/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 {% endblock %}
 
@@ -756,7 +756,7 @@
 
 {% block javascripts %}
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="theme/plugins/apex/apexcharts.min.js"></script>
-    <script src="theme/assets/js/dashboard/dash_1.js"></script>
+    <script src="{{ asset('theme/plugins/apex/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('theme/assets/js/dashboard/dash_1.js') }}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 {% endblock %}

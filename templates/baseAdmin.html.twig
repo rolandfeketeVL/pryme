@@ -6,13 +6,13 @@
 {#        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">#}
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
-        <link href="theme/assets/css/loader.css" rel="stylesheet" type="text/css" />
-        <script src="theme/assets/js/loader.js"></script>
+{#        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>#}
+{#        <link href="theme/assets/css/loader.css" rel="stylesheet" type="text/css" />#}
+        <link href="{{ asset('theme/assets/css/loader.css') }}" rel="stylesheet" type="text/css">
 
         <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
-        <link href="theme/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="theme/assets/css/plugins.css" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('theme/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('theme/assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
         <!-- END GLOBAL MANDATORY STYLES -->
 
         {% block stylesheets %}{% endblock %}
@@ -24,17 +24,25 @@
 
 
         <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-        <script src="theme/assets/js/libs/jquery-3.1.1.min.js"></script>
-        <script src="theme/bootstrap/js/popper.min.js"></script>
-        <script src="theme/bootstrap/js/bootstrap.min.js"></script>
-        <script src="theme/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-        <script src="theme/assets/js/app.js"></script>
+        <script src="{{ asset('theme/assets/js/libs/jquery-3.1.1.min.js') }}"></script>
+
+        <script
+                src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
+                integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY="
+                crossorigin="anonymous"></script>
+
+        <script src="{{ asset('theme/assets/js/app.js') }}"></script>
+        <script src="{{ asset('theme/bootstrap/js/popper.min.js') }}"></script>
+        <script src="{{ asset('theme/bootstrap/js/bootstrap.js') }}"></script>
+        <script src="{{ asset('theme/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+        <script src="{{ asset('theme/assets/js/loader.js') }}"></script>
+
         <script>
             $(document).ready(function() {
                 App.init();
             });
         </script>
-        <script src="theme/assets/js/custom.js"></script>
+        <script src="{{ asset('theme/assets/js/custom.js') }}"></script>
 
         <!-- END GLOBAL MANDATORY SCRIPTS -->
         {% block javascripts %}{% endblock %}

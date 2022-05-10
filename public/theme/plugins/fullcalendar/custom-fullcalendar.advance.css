@@ -146,6 +146,13 @@ button.fc-today-button {
   -webkit-box-shadow: none !important;
   box-shadow: none !important; }
 
+.bg-registered {
+  background-color: rgba(140, 219, 61, 0.42) !important;
+  border-color: rgba(226, 160, 63, 0.42) !important;
+  color: #fff;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important; }
+
 .bg-danger {
   background-color: rgba(231, 80, 90, 0.38) !important;
   border-color: rgba(231, 80, 90, 0.38) !important;
@@ -153,7 +160,7 @@ button.fc-today-button {
   -webkit-box-shadow: none !important;
   box-shadow: none !important; }
 
-a.bg-primary:hover, a.bg-success:hover, a.bg-warning:hover, a.bg-danger:hover {
+a.bg-primary:hover, a.bg-success:hover, a.bg-warning:hover, a.bg-danger:hover, a.bg-registered:hover {
   background-color: inherit !important; }
 
 .fc-scroller {

@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\Membership;
+use App\Entity\Appointment;
+use App\Repository\AppointmentRepository;
 use App\Repository\EventRepository;
 use App\Repository\MembershipGroupRepository;
 use App\Repository\MembershipRepository;
 use App\Repository\TrainerRepository;
+use App\Repository\UserRepository;
 use App\Service\MembershipService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,8 +28,10 @@ class CalendarController extends AbstractController
     private TrainerRepository $trainerRepository;
     private MembershipService $membershipService;
     private MembershipGroupRepository $membershipGroupRepository;
+    private UserRepository $userRepository;
+    private AppointmentRepository $appointmentRepository;
 
-    public function __construct(EntityManagerInterface $em, MembershipRepository $membershipRepository, MembershipService $membershipService, TrainerRepository $trainerRepository, EventRepository $eventRepository, MembershipGroupRepository $membershipGroupRepository)
+    public function __construct(EntityManagerInterface $em, MembershipRepository $membershipRepository, MembershipService $membershipService, TrainerRepository $trainerRepository, EventRepository $eventRepository, MembershipGroupRepository $membershipGroupRepository, UserRepository $userRepository, AppointmentRepository $appointmentRepository)
     {
         $this->em = $em;
         $this->membershipRepository = $membershipRepository;
@@ -35,6 +39,8 @@ class CalendarController extends AbstractController
         $this->trainerRepository = $trainerRepository;
         $this->eventRepository = $eventRepository;
         $this->membershipGroupRepository = $membershipGroupRepository;
+        $this->userRepository = $userRepository;
+        $this->appointmentRepository = $appointmentRepository;
     }
 
     #[Route('/calendar', name: 'calendar')]
@@ -148,6 +154,67 @@ class CalendarController extends AbstractController
     {
         $event = $this->eventRepository->find($id);
         $this->em->remove($event);
+        $this->em->flush();
+
+        return new JsonResponse('OK', JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/appointmentsCalendar/{user_id}', name: 'appointmentsCalendar', methods: ['GET'])]
+    public function appointmentsCalendar($user_id): Response
+    {
+        $memberships = $this->membershipRepository->findAll();
+        $client = $this->userRepository->find($user_id);
+
+        $events = $client->getMembership()->getMembershipGroup()->getEvents();
+        $clientAppointments = $client->getAppointments();
+
+        $appointedEvents = array();
+        foreach ($clientAppointments as $appointment){
+            $appointedEvents[] = $appointment->getEvent()->getId();
+        }
+
+        $data = [
+            'memberships' => $memberships,
+            'events' => $events,
+            'appointedEvents' => $appointedEvents,
+            'user_id' => $user_id
+        ];
+
+        return $this->render('calendar/appointmentsCalendar.html.twig', $data);
+    }
+
+    #[Route('/createAppointment/{event_id}/{user_id}', name: 'createAppointment', methods: ['GET', 'POST'])]
+    public function createAppointment($event_id, $user_id): Response
+    {
+        $client = $this->userRepository->find($user_id);
+        $event = $this->eventRepository->find($event_id);
+
+        $event_appointments = $event->getAppointments();
+
+        if(count($event_appointments) >= $client->getMembership()->getPersonsNo()){
+            return new JsonResponse('TOO MUCH', JsonResponse::HTTP_OK);
+        }
+
+        $appointment = new Appointment();
+        $appointment->setEvent($event);
+        $appointment->setUser($client);
+        $appointment->setGuestlist(false);
+
+        $this->em->persist($appointment);
+        $this->em->flush();
+
+        return new JsonResponse('OK', JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/deleteAppointment/{event_id}/{user_id}', name: 'deleteAppointment', methods: ['GET', 'DELETE'])]
+    public function deleteAppointment($event_id, $user_id): Response
+    {
+        $criteria = [
+            "event" => $event_id,
+            "user"  => $user_id
+        ];
+        $appointment = $this->appointmentRepository->findOneBy($criteria);
+        $this->em->remove($appointment);
         $this->em->flush();
 
         return new JsonResponse('OK', JsonResponse::HTTP_OK);

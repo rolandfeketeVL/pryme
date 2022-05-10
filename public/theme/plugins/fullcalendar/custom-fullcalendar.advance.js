@@ -149,7 +149,7 @@ $(document).ready(function() {
 
             // Task Modal Input
             var taskTitle = $('#write-e');
-            var taskTitleValue = taskTitle.val(eventTitle);
+            var taskTitleValue = taskTitle.selectpicker('val', eventTitle);
 
             var taskID = $("#eventId");
             var eventIdValue = taskID.val(eventID)
