@@ -162,6 +162,10 @@ class CalendarController extends AbstractController
     #[Route('/appointmentsCalendar/{user_id}', name: 'appointmentsCalendar', methods: ['GET'])]
     public function appointmentsCalendar($user_id = 0): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
+
         if($user_id == 0){
             $user_id = $this->getUser()->getId();
         }else{
@@ -181,7 +185,7 @@ class CalendarController extends AbstractController
 
         $now = date_create_from_format('Y-m-d', date('Y-m-d'));
         foreach ($events as $key => $e){
-            if(($now > $e->getStartdate()) || ($client->getMembershipExpiryDate() < $e->getStartdate())){
+            if(($now > $e->getStartdate()) || ($client->getMembershipExpiryDate() < $e->getStartdate()) || (count($e->getAppointments()) >= $client->getMembership()->getPersonsNo())){
                 unset($events[$key]);
             }
         }
@@ -189,14 +193,17 @@ class CalendarController extends AbstractController
         $clientAppointments = $client->getAppointments();
 
         $appointedEvents = array();
+        $appointedEventsIDS = array();
         foreach ($clientAppointments as $appointment){
-            $appointedEvents[] = $appointment->getEvent()->getId();
+            $appointedEvents[] = $appointment->getEvent();
+            $appointedEventsIDS[] = $appointment->getEvent()->getId();
         }
 
         $data = [
             'memberships' => $memberships,
             'events' => $events,
             'appointedEvents' => $appointedEvents,
+            'appointedEventsIDS' => $appointedEventsIDS,
             'user_id' => $user_id
         ];
 
@@ -211,8 +218,13 @@ class CalendarController extends AbstractController
 
         $event_appointments = $event->getAppointments();
 
+        //dd($client->getMembership()->getPersonsNo());
         if(count($event_appointments) >= $client->getMembership()->getPersonsNo()){
-            return new JsonResponse('TOO MUCH', JsonResponse::HTTP_OK);
+            $this->addFlash(
+                'error',
+                'Too many persons registered to this event'
+            );
+            return $this->redirectToRoute('appointmentsCalendar');
         }
 
 //        if($client->getCreditsRemaining() <= 0) {

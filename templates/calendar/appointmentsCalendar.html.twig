@@ -15,6 +15,7 @@
     <link href="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('theme/assets/css/forms/switches.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('theme/assets/css/elements/alert.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('theme/plugins/notification/snackbar/snackbar.min.css') }}" rel="stylesheet" type="text/css">
 
     <!-- END PAGE LEVEL STYLES -->
     <style>
@@ -169,11 +170,8 @@
                     link: '{{ event.link }}',
                     start: '{{ event.startdate | date('Y-m-d H:i') }}',
                     end: '{{ event.enddate | date('Y-m-d H:i') }}',
-                    appointed: {% if event.id in appointedEvents %} 1, {% else %} 0, {% endif %}
-                    className:{% if event.id in appointedEvents %}
-                                    "bg-registered",
-                                {% else %}
-                                    {% if event.trainer %}
+                    appointed: {% if event.id in appointedEventsIDS %} 1, {% else %} 0, {% endif %}
+                    className:     {% if event.trainer %}
                                         {% if event.trainer.name == 'Robert' %} "bg-warning", {% endif %}
                                         {% if event.trainer.name == 'Emilia' %} "bg-primary", {% endif %}
                                         {% if event.trainer.name == 'Flavia' %} "bg-success", {% endif %}
@@ -181,7 +179,18 @@
                                    {% else %}
                                         "bg-primary",
                                    {% endif %}
-                                {% endif %}
+                    description: {% if event.trainer %} '{{ event.trainer.name }}' {% else %} 'No trainer! ' {% endif %}
+                },
+                {% endfor %}
+                {% for event in appointedEvents %}
+                {
+                    id: '{{ event.id }}',
+                    title: '{{ event.name }}',
+                    link: '{{ event.link }}',
+                    start: '{{ event.startdate | date('Y-m-d H:i') }}',
+                    end: '{{ event.enddate | date('Y-m-d H:i') }}',
+                    appointed: {% if event.id in appointedEventsIDS %} 1, {% else %} 0, {% endif %}
+                    className: "bg-registered",
                     description: {% if event.trainer %} '{{ event.trainer.name }}' {% else %} 'No trainer! ' {% endif %}
                 },
                 {% endfor %}
@@ -193,6 +202,7 @@
         <script src="{{ asset('theme/plugins/fullcalendar/appointments-fullcalendar.advance.js') }}"></script>
         <script src="{{ asset('theme/assets/js/scrollspyNav.js') }}"></script>
         <script src="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.js') }}"></script>
+        <script src="{{ asset('theme/plugins/notification/snackbar/snackbar.min.js') }}"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
 
         <script>
@@ -251,5 +261,23 @@
                     }
                 });
             });
+
+            {% for message in app.flashes('success') %}
+            Snackbar.show({
+                text: '{{ message }}',
+                actionTextColor: '#fff',
+                backgroundColor: '#1abc9c',
+                pos: 'top-right'
+            });
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+            Snackbar.show({
+                text: '{{ message }}',
+                actionTextColor: '#fff',
+                backgroundColor: '#c51717',
+                pos: 'top-right'
+            });
+            {% endfor %}
         </script>
     {% endblock %}
