@@ -183,8 +183,8 @@ div.dataTables_wrapper button:hover {
   transform: none; }
 
 div.dataTables_wrapper .table-responsive {
-  overflow-x: auto;
-  overflow-y: hidden; }
+  overflow-x: visible;
+  overflow-y: visible; }
 
 .table > thead > tr > th.dt-no-sorting:before, .table > thead > tr > th.dt-no-sorting:after {
   display: none; }

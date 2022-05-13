@@ -59,15 +59,49 @@ class UsersController extends AbstractController
             $client->setZip($request->request->get('zip'));
             $client->setState($request->request->get('state'));
             $client->setCountry($request->request->get('country'));
-            $client->setMembership($this->membershipRepository->find($request->request->get('membership')));
-            $client->setCreditsRemaining($request->request->get('credits'));
-            $client->setMembershipExpiryDate(DateTime::createFromFormat('Y-m-d', $request->request->get('membership_expiration')));
+
+            if($this->getUser()->isAdmin()){
+                $client->setMembership($this->membershipRepository->find($request->request->get('membership')));
+                $client->setCreditsRemaining($request->request->get('credits'));
+                $client->setMembershipExpiryDate(DateTime::createFromFormat('Y-m-d', $request->request->get('membership_expiration')));
+            }
 
             $this->em->flush();
             return new JsonResponse('OK', JsonResponse::HTTP_OK);
         }
 
         return new JsonResponse($clientPrepared, JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/profile', name: 'app_users_profile')]
+    public function profile(): Response
+    {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
+        $userAppointments = $user->getAppointments();
+
+        if($user->getmembershipExpiryDate()){
+            $membershipExpiry = $user->getmembershipExpiryDate();
+            $now = date_create_from_format('Y-m-d', date('Y-m-d'));
+            $diff = date_diff($now, $membershipExpiry);
+            $interval = $diff->format("%a");
+        }else{
+            $interval = 0;
+        }
+
+
+//        $clients = $this->userRepository->findByRole("client");
+//        $memberships = $this->membershipRepository->findAll();
+
+        $data = [
+            "user" => $user,
+            "daysLeft" => $interval,
+            "userAppointments" => $userAppointments
+        ];
+
+        return $this->render('users/profile.html.twig', $data);
     }
 
 }

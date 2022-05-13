@@ -415,4 +415,19 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, \JsonS
 
         return $this;
     }
+
+    public function isAdmin(): ?bool
+    {
+        return in_array("ROLE_ADMIN", $this->roles);
+    }
+
+    public function decreaseCredits(): self
+    {
+        if($this->creditsRemaining > 0)
+        {
+            $this->creditsRemaining--;
+        }
+
+        return $this;
+    }
 }

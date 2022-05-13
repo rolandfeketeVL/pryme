@@ -1,0 +1,87 @@
+{% extends 'baseAuthentication.html.twig' %}
+
+{% block title %}Reset you password{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/assets/css/forms/switches.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/assets/css/elements/alert.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/notification/snackbar/snackbar.min.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="form-container">
+        <div class="form-form">
+            <div class="form-form-wrap">
+                <div class="form-container">
+                    <div class="form-content">
+
+                        <h1 class="">Reset you password</h1>
+                        {{ form_start(resetForm) }}
+                            <div id="email-field" class="field-wrapper input">
+                                {{ form_row(resetForm.plainPassword) }}
+                            </div>
+                            <div class="d-sm-flex justify-content-between">
+                                <div class="field-wrapper">
+                                    <button class="btn btn-primary">Reset password</button>
+                                </div>
+                            </div>
+                        {{ form_end(resetForm) }}
+
+{#                        <form class="text-left">#}
+{#                            <div class="form">#}
+
+{#                                <div id="email-field" class="field-wrapper input">#}
+{#                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-at-sign"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>#}
+{#                                    <input id="email" name="email" type="text" value="" placeholder="Email">#}
+{#                                </div>#}
+{#                                <div class="d-sm-flex justify-content-between">#}
+{#                                    <div class="field-wrapper">#}
+{#                                        <button type="submit" class="btn btn-primary" value="">Reset</button>#}
+{#                                    </div>#}
+{#                                </div>#}
+
+{#                            </div>#}
+{#                        </form>#}
+                        <p class="terms-conditions">© 2022 All Rights Reserved. <a href="index.html">PRYME</a> is a product of <a href="https://ptsbyemilia.com/" target="_blank">PTS by Emilia</a>. </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-image">
+            <div class="l-image">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('theme/assets/js/authentication/loginForm.js') }}"></script>
+    <script src="{{ asset('theme/plugins/notification/snackbar/snackbar.min.js') }}"></script>
+    <script>
+
+        {% for message in app.flashes('success') %}
+        Snackbar.show({
+            text: '{{ message }}',
+            actionTextColor: '#fff',
+            backgroundColor: '#1abc9c',
+            pos: 'top-right'
+        });
+        {% endfor %}
+
+    </script>
+{% endblock %}
+
+
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Reset your password{% endblock %}#}
+
+{#{% block body %}#}
+{#    <h1>Reset your password</h1>#}
+
+
+{#{% endblock %}#}

@@ -150,6 +150,10 @@ $(document).ready(function() {
                 registerButton.style.display = "none";
                 unregisterButton.style.display = "block";
                 registeredMessage.style.display = "block";
+            }else{
+                registerButton.style.display = "block";
+                unregisterButton.style.display = "none";
+                registeredMessage.style.display = "none";
             }
 
 

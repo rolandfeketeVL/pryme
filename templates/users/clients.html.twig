@@ -6,13 +6,13 @@
 
 {% block stylesheets %}
     <!-- BEGIN PAGE LEVEL STYLES -->
-    <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/datatables.css">
-    <link rel="stylesheet" type="text/css" href="theme/assets/css/forms/theme-checkbox-radio.css">
-    <link rel="stylesheet" type="text/css" href="theme/plugins/table/datatable/dt-global_style.css">
-    <link rel="stylesheet" type="text/css" href="theme/plugins/animate/animate.css"/>
-    <link href="theme/assets/css/scrollspyNav.css" rel="stylesheet" type="text/css" />
-    <link href="theme/assets/css/components/custom-modal.css" rel="stylesheet" type="text/css" />
-    <link href="theme/plugins/file-upload/file-upload-with-preview.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/assets/css/forms/theme-checkbox-radio.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/table/datatable/dt-global_style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/animate/animate.css') }}"/>
+    <link href="{{ asset('theme/assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('theme/assets/css/components/custom-modal.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('theme/plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/flatpickr/flatpickr.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('theme/plugins/flatpickr/custom-flatpickr.css') }}">
@@ -231,9 +231,9 @@
 
 {% block javascripts %}
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <script src="theme/plugins/table/datatable/datatables.js"></script>
-    <script src="theme/assets/js/scrollspyNav.js"></script>
-    <script src="theme/plugins/file-upload/file-upload-with-preview.min.js"></script>
+    <script src="{{ asset('theme/plugins/table/datatable/datatables.js') }}"></script>
+    <script src="{{ asset('theme/assets/js/scrollspyNav.js') }}"></script>
+    <script src="{{ asset('theme/plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
     <script src="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('theme/plugins/flatpickr/flatpickr.js') }}"></script>
     <script>

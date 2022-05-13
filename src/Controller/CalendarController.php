@@ -160,12 +160,32 @@ class CalendarController extends AbstractController
     }
 
     #[Route('/appointmentsCalendar/{user_id}', name: 'appointmentsCalendar', methods: ['GET'])]
-    public function appointmentsCalendar($user_id): Response
+    public function appointmentsCalendar($user_id = 0): Response
     {
+        if($user_id == 0){
+            $user_id = $this->getUser()->getId();
+        }else{
+            if(!$this->getUser()->isAdmin()){
+                return $this->redirectToRoute('app_users_profile');
+            }
+        }
         $memberships = $this->membershipRepository->findAll();
         $client = $this->userRepository->find($user_id);
 
-        $events = $client->getMembership()->getMembershipGroup()->getEvents();
+        $events = [];
+        if($client->getMembership()){
+            if($client->getMembership()->getMembershipGroup()){
+                $events = $client->getMembership()->getMembershipGroup()->getEvents();
+            }
+        }
+
+        $now = date_create_from_format('Y-m-d', date('Y-m-d'));
+        foreach ($events as $key => $e){
+            if(($now > $e->getStartdate()) || ($client->getMembershipExpiryDate() < $e->getStartdate())){
+                unset($events[$key]);
+            }
+        }
+
         $clientAppointments = $client->getAppointments();
 
         $appointedEvents = array();
@@ -194,6 +214,10 @@ class CalendarController extends AbstractController
         if(count($event_appointments) >= $client->getMembership()->getPersonsNo()){
             return new JsonResponse('TOO MUCH', JsonResponse::HTTP_OK);
         }
+
+//        if($client->getCreditsRemaining() <= 0) {
+//
+//        }
 
         $appointment = new Appointment();
         $appointment->setEvent($event);
