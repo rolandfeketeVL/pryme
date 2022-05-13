@@ -282,10 +282,13 @@
             {% for k,users in usersofevents %}
                 usersOfEvents[{{ k }}] = [];
                 {% for u in users %}
-                    usersOfEvents[{{ k }}].push('{{ u.firstname }}' + ' ' + '{{ u.lastname }}');
+                    usersOfEvents[{{ k }}].push({
+                        name: '{{ u.firstname }}' + ' ' + '{{ u.lastname }}',
+                        id: '{{ u.id }}'
+                    });
                 {% endfor %}
             {% endfor %}
-
+console.log(usersOfEvents);
         </script>
         <script src="{{ asset('theme/plugins/fullcalendar/moment.min.js') }}"></script>
         <script src="{{ asset('theme/plugins/flatpickr/flatpickr.js') }}"></script>
@@ -357,5 +360,14 @@
                     }
                 });
             });
+
+            function removeAppointment(userId, eventId){
+                $.ajax({
+                    url: '/deleteAppointment/' + eventId + '/' + userId,
+                    type: "GET",
+                    success: function (data) {
+                    }
+                })
+            }
         </script>
     {% endblock %}

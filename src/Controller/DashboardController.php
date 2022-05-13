@@ -13,6 +13,10 @@ class DashboardController extends AbstractController
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
+        }else{
+            if(!$this->getUser()->isAdmin()){
+                return $this->redirectToRoute('app_users_profile');
+            }
         }
 
 

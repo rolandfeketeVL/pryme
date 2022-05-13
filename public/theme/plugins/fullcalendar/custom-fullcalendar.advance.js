@@ -166,18 +166,24 @@ $(document).ready(function() {
             var taskInputEndDate = $("#end-date");
             var taskInputEndtDateValue = taskInputEndDate.val(info.end.format("YYYY-MM-DD HH:mm:ss"));
 
-            $('#usersofevents tbody').html(" ");
-            for(let i=0; i < usersOfEvents[eventID].length; i++){
-                let newRow = "<tr>\n" +
-                    "                                                        <td>\n" +
-                    "                                                            <div class=\"d-flex\">\n" +
-                    "                                                                <p class=\"align-self-center mb-0\">" + usersOfEvents[eventID][i] +"</p>\n" +
-                    "                                                            </div>\n" +
-                    "                                                        </td>\n" +
-                    "                                                        <td class=\"text-center\"></td>\n" +
-                    "                                                    </tr>";
-                $('#usersofevents tbody').append(newRow);
+            if(usersOfEvents[eventID]){
+                $('#usersofevents').css('display', 'block');
+                $('#usersofevents tbody').html(" ");
+                for(let i=0; i < usersOfEvents[eventID].length; i++){
+                    let newRow = "<tr>\n" +
+                        "                                                        <td>\n" +
+                        "                                                            <div class=\"d-flex\">\n" +
+                        "                                                                <p class=\"align-self-center mb-0\">" + usersOfEvents[eventID][i].name +"</p>\n" +
+                        "                                                            </div>\n" +
+                        "                                                        </td>\n" +
+                        "                                                        <td class=\"text-center\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" onclick='removeAppointment(" + usersOfEvents[eventID][i].id + "," + eventID + "); $(this).closest(\"tr\").remove();' class=\"feather feather-x t-icon t-hover-icon\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"></line><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"></line></svg></td>\n" +
+                        "                                                    </tr>";
+                    $('#usersofevents tbody').append(newRow);
+                }
+            }else{
+                $('#usersofevents').css('display', 'none');
             }
+
 
             var startDate = flatpickr(document.getElementById('start-date'), {
                 enableTime: true,

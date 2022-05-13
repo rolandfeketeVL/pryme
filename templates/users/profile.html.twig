@@ -154,6 +154,9 @@
                                             <div class="item-timeline">
                                                 <div class="t-meta-date">
                                                     <p class="">{{ userAppointment.event.startdate | date('Y-m-d H:i') }}</p>
+                                                    {% if userAppointment.event.link  %}
+                                                        <a href="{{ userAppointment.event.link }}" class="btn-primary btn-sm mt-2" target="_blank">Join class!</a>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="t-dot">
                                                 </div>
