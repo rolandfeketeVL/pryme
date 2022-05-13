@@ -430,4 +430,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, \JsonS
 
         return $this;
     }
+
+    public function increaseCredits(): self
+    {
+
+        $this->creditsRemaining++;
+
+        return $this;
+    }
 }

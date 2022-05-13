@@ -69,7 +69,7 @@
                                         </td>
                                         <td>{{ client.email }}</td>
                                         <td>{{ client.phone }}</td>
-                                        <td>{{ client.membership.name }}</td>
+                                        <td>{% if client.membership %} {{ client.membership.name }} {% endif %}</td>
                                         <td>{{ client.membershipExpiryDate | date('Y-m-d') }}</td>
                                         <td>{{ client.creditsRemaining }}</td>
                                         <td class="text-center">

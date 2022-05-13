@@ -195,8 +195,10 @@ class CalendarController extends AbstractController
         $appointedEvents = array();
         $appointedEventsIDS = array();
         foreach ($clientAppointments as $appointment){
-            $appointedEvents[] = $appointment->getEvent();
-            $appointedEventsIDS[] = $appointment->getEvent()->getId();
+            if($now < $appointment->getEvent()->getStartdate()){
+                $appointedEvents[] = $appointment->getEvent();
+                $appointedEventsIDS[] = $appointment->getEvent()->getId();
+            }
         }
 
         $data = [
@@ -218,7 +220,6 @@ class CalendarController extends AbstractController
 
         $event_appointments = $event->getAppointments();
 
-        //dd($client->getMembership()->getPersonsNo());
         if(count($event_appointments) >= $client->getMembership()->getPersonsNo()){
             $this->addFlash(
                 'error',
@@ -227,9 +228,15 @@ class CalendarController extends AbstractController
             return $this->redirectToRoute('appointmentsCalendar');
         }
 
-//        if($client->getCreditsRemaining() <= 0) {
-//
-//        }
+        if($client->getCreditsRemaining() <= 0) {
+            $this->addFlash(
+                'error',
+                'You have no credits remaining!'
+            );
+            return $this->redirectToRoute('appointmentsCalendar');
+        }else{
+            $client->decreaseCredits();
+        }
 
         $appointment = new Appointment();
         $appointment->setEvent($event);
@@ -237,6 +244,7 @@ class CalendarController extends AbstractController
         $appointment->setGuestlist(false);
 
         $this->em->persist($appointment);
+        $this->em->persist($client);
         $this->em->flush();
 
         return new JsonResponse('OK', JsonResponse::HTTP_OK);
@@ -250,7 +258,12 @@ class CalendarController extends AbstractController
             "user"  => $user_id
         ];
         $appointment = $this->appointmentRepository->findOneBy($criteria);
+        $client = $this->userRepository->find($user_id);
+        $client->increaseCredits();
+
         $this->em->remove($appointment);
+        $this->em->persist($client);
+
         $this->em->flush();
 
         return new JsonResponse('OK', JsonResponse::HTTP_OK);
