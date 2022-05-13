@@ -165,7 +165,20 @@ $(document).ready(function() {
 
             var taskInputEndDate = $("#end-date");
             var taskInputEndtDateValue = taskInputEndDate.val(info.end.format("YYYY-MM-DD HH:mm:ss"));
-        
+
+            $('#usersofevents tbody').html(" ");
+            for(let i=0; i < usersOfEvents[eventID].length; i++){
+                let newRow = "<tr>\n" +
+                    "                                                        <td>\n" +
+                    "                                                            <div class=\"d-flex\">\n" +
+                    "                                                                <p class=\"align-self-center mb-0\">" + usersOfEvents[eventID][i] +"</p>\n" +
+                    "                                                            </div>\n" +
+                    "                                                        </td>\n" +
+                    "                                                        <td class=\"text-center\"></td>\n" +
+                    "                                                    </tr>";
+                $('#usersofevents tbody').append(newRow);
+            }
+
             var startDate = flatpickr(document.getElementById('start-date'), {
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",

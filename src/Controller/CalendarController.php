@@ -46,17 +46,33 @@ class CalendarController extends AbstractController
     #[Route('/calendar', name: 'calendar')]
     public function index(): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
+
         $memberships = $this->membershipRepository->findAll();
         $membershipsGroups = $this->membershipGroupRepository->findAll();
         $trainers = $this->trainerRepository->findAll();
         $events = $this->eventRepository->findAll();
-        //dd($events);
+
+        $usersofevents = array();
+        foreach ($events as $e){
+            if(count($e->getAppointments()) > 0){
+                $appointments = $e->getAppointments();
+                $usersofevents[$e->getId()] = array();
+
+                foreach ($appointments as $ap){
+                    $usersofevents[$e->getId()][] = $ap->getUser();
+                }
+            }
+        }
 
         $data = [
             'memberships' => $memberships,
             'membershipsGroups' => $membershipsGroups,
             'trainers' => $trainers,
-            'events' => $events
+            'events' => $events,
+            'usersofevents' => $usersofevents
         ];
 
         return $this->render('calendar/calendar.html.twig', $data);

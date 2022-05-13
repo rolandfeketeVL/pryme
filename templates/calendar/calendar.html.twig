@@ -14,6 +14,7 @@
     <link href="{{ asset('theme/assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('theme/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('theme/assets/css/forms/switches.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('theme/assets/css/tables/table-basic.css') }}" rel="stylesheet" type="text/css">
 
     <!-- END PAGE LEVEL STYLES -->
     <style>
@@ -200,6 +201,22 @@
                                             </div>
                                         </div>
 
+                                        <div class="row">
+                                            <div class="table-responsive" id="usersofevents">
+                                                <table class="table table-bordered table-striped mb-4">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th class="text-center">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
                                     </form>
                                 </div>
                             </div>
@@ -259,6 +276,16 @@
                 },
                 {% endfor %}
             ];
+
+
+            var usersOfEvents = [];
+            {% for k,users in usersofevents %}
+                usersOfEvents[{{ k }}] = [];
+                {% for u in users %}
+                    usersOfEvents[{{ k }}].push('{{ u.firstname }}' + ' ' + '{{ u.lastname }}');
+                {% endfor %}
+            {% endfor %}
+
         </script>
         <script src="{{ asset('theme/plugins/fullcalendar/moment.min.js') }}"></script>
         <script src="{{ asset('theme/plugins/flatpickr/flatpickr.js') }}"></script>
